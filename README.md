@@ -81,7 +81,33 @@ ds.pin(enterprise_idp_entity_id);
 
 Note that the mdq implementation provided to the instance of DiscoveryService must be able to resolve this entity_id.
 
+Finally the remove method removes the chose entity_id from the persistence-service if present.
+
+```
+ds.remove(entity_id)
+```
+
 Metadata JSON schema
 ----
 
-TODO
+The following fields are currently used:
+
+```
+{
+  entity_icon: <a data: URI for direct inclusion in html>
+  descr: <a short description>
+  title: <the name of the identity provider - primary display for users>
+  name_tag: <an upper-case SLUG - typically based on the non-TLD/ccTLD part of the domain> 
+  type: <idp|sp>
+  auth: <saml|...>
+  entity_id: <the entityID of the IdP>
+  hidden: <if hide-from-discovery is set>
+  scope|domain: <a comma-separated list of domains/scopes associated with the IdP>
+  id: <sha1 ID as specified by the MDQ spec>
+}
+```
+
+Context
+----
+
+The PersistenceService is initialized with a context. The context is a namespace string passed with each call to the API. The context is used to differentiate the persistence local storage to avoid overlap. This may seem counter intutitive as the point of the thiss.io persistence service is to share IdP choices among several services. However the goal is really to share IdP choice among services that share a common view of metadata. In order to make it possible for service to have overlapping or even conflicting metadata "views" the context can be used to differentiate between "metadata domains". A contexts may be protected in a given persistence service ORIGIN so some operations (such as removing a choice) may fail. Failures are always handled as rejected Promises and should be handled by the caller in the appropriate way.
