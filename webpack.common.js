@@ -4,8 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const DotEnv = require("dotenv-webpack");
 
-require("babel-polyfill");
-
 module.exports = {
   resolve: {
     alias: {
@@ -14,8 +12,8 @@ module.exports = {
     }
   },
   entry: {
-      'thiss-ds': ['babel-polyfill', './src/dist.js'],
-      'demo': ['babel-polyfill', './src/demo.js'],
+      'thiss-ds': ['./src/dist.js'],
+      'demo': ['./src/demo.js'],
   },
   plugins: [
       new DotEnv({systemvars: true}),
