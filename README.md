@@ -1,8 +1,14 @@
 thiss.io clients
 ====
 
+Install via npm is easiest:
+
+```
+npm install [--save] @theidentityselector/thiss-ds
+```
+
 A set of clients for the thiss.io service: persistance and discovery. Usage is prettys simple. Load the
-js thiss.ds.js somehow either
+js thiss.ds.js somehow ...
 
 CommonJS
 ---
