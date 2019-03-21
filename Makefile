@@ -19,3 +19,6 @@ cover:
 
 setup:
 	@npm install
+
+publish:
+	@npm publish --access public
