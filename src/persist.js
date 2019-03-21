@@ -1,5 +1,9 @@
 const postRobot = require("post-robot");
 
+function randID() {
+     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+}
+
 export class PersistenceService {
 
     constructor(url, opts) {
@@ -14,6 +18,7 @@ export class PersistenceService {
         frame.style['position'] = 'absolute';
         frame.style['top'] = '-999px';
         frame.style['left'] = '-999px';
+        frame.id = "ps_"+randID();
         window.document.body.appendChild(frame);
         frame.src = url;
         return frame;
