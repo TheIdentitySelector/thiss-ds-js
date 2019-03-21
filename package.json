@@ -2,7 +2,7 @@
   "name": "thiss-ds",
   "version": "1.0.0",
   "description": "A set of clients for the thiss.io service",
-  "main": "dist/thiss.ds.js",
+  "main": "dist/thiss-ds.js",
   "scripts": {
     "test": "./node_modules/.bin/nyc --reporter=lcov -- ./node_modules/mocha/bin/_mocha --require @babel/register",
     "lint": "node_modules/.bin/goodparts src",
