@@ -1,0 +1,51 @@
+const path = require('path');
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const DotEnv = require("dotenv-webpack");
+
+require("babel-polyfill");
+
+module.exports = {
+  resolve: {
+    alias: {
+        'node_modules': path.join(__dirname, 'node_modules'),
+        'bower_modules': path.join(__dirname, 'bower_modules'),
+    }
+  },
+  entry: {
+      'thiss-ds': ['babel-polyfill', './src/index.js'],
+  },
+  plugins: [
+      new DotEnv({systemvars: true}),
+      new CleanWebpackPlugin(),
+      new HtmlWebpackPlugin({
+          filename: 'index.html',
+          inject: true,
+          chunks: ['thiss-ds'],
+          template: '!ejs-loader!src/index.html'
+      }),
+  ],
+  output: {
+      filename: '[name].js',
+      path: path.resolve(__dirname, 'dist'),
+      publicPath: "/",
+      libraryTarget: 'umd',
+      library: '[name]',
+      globalObject: 'this'
+  },
+  module: {
+     rules: [
+         {
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env'],
+                }
+            }
+       }
+     ]
+   }
+};
