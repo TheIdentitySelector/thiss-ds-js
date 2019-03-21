@@ -14,7 +14,8 @@ module.exports = {
     }
   },
   entry: {
-      'thiss-ds': ['babel-polyfill', './src/index.js'],
+      'thiss-ds': ['babel-polyfill', './src/dist.js'],
+      'demo': ['babel-polyfill', './src/demo.js'],
   },
   plugins: [
       new DotEnv({systemvars: true}),
@@ -22,7 +23,7 @@ module.exports = {
       new HtmlWebpackPlugin({
           filename: 'index.html',
           inject: true,
-          chunks: ['thiss-ds'],
+          chunks: ['demo'],
           template: '!ejs-loader!src/index.html'
       }),
   ],

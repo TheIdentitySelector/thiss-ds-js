@@ -29,7 +29,8 @@
     "node-fetch": "^2.3.0",
     "nyc": "^13.3.0",
     "post-robot": "^10.0.14",
-    "snyk": "^1.140.0"
+    "snyk": "^1.140.0",
+    "webpack-dev-server": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
