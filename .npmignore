@@ -1,0 +1,7 @@
+.snyk
+.coveralls.yml
+test
+.travis.yml
+coverage
+.idea
+.nyc_output
