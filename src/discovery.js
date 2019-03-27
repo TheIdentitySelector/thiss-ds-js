@@ -94,7 +94,7 @@ export class DiscoveryService {
     saml_discovery_response(entity_id) {
         return this.do_saml_discovery_response(entity_id).then(entity => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
-            return ds_response_url(entity, parms)
+            return ds_response_url(entity, params)
         }).then(url => {
             window.location.top.href = url;
         }).catch(function(error) {
