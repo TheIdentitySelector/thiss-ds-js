@@ -5,10 +5,12 @@
   "main": "dist/thiss-ds.js",
   "homepage": "https://thiss.io",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/TheIdentitySelector/thiss-ds-js"
+    "type": "git",
+    "url": "https://github.com/TheIdentitySelector/thiss-ds-js"
   },
-  "bugs": { "url" : "https://github.com/TheIdentitySelector/thiss-ds-js/issues" },
+  "bugs": {
+    "url": "https://github.com/TheIdentitySelector/thiss-ds-js/issues"
+  },
   "scripts": {
     "test": "./node_modules/.bin/nyc --reporter=lcov -- ./node_modules/mocha/bin/_mocha --require @babel/register",
     "lint": "node_modules/.bin/goodparts src",
