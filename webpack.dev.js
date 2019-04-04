@@ -7,12 +7,7 @@ module.exports = merge(common, {
    mode: 'development',
    devtool: 'inline-source-map',
    plugins: [new webpack.EnvironmentPlugin({
-       BASE_URL: 'http://localhost:9000/',
        COMPONENT_URL: 'http://localhost:9000/cta/',
-       MDQ_URL: '/entities/',
-       PERSISTENCE_URL: 'http://localhost:9000/ps/',
-       SEARCH_URL: '/entities/',
-       STORAGE_DOMAIN: 'localhost:9000',
        LOGLEVEL: 'warn'
   })]
 });
