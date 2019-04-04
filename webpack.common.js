@@ -12,7 +12,7 @@ module.exports = {
     }
   },
   entry: {
-      'thiss-ds': ['./src/dist.js'],
+      'thiss-ds': ['./src/clients.js'],
       'demo': ['./src/demo.js'],
   },
   plugins: [
