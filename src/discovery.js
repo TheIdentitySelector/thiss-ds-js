@@ -96,7 +96,7 @@ export class DiscoveryService {
             let params = parse_qs(window.location.search.substr(1).split('&'));
             return ds_response_url(entity, params)
         }).then(url => {
-            window.location.top.href = url;
+            window.top.location.href = url;
         }).catch(function(error) {
             console.log(error);
         });
