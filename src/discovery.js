@@ -111,17 +111,14 @@ export class DiscoveryService {
         console.log(entity_id);
         console.log(obj.context);
         return obj.ps.entity(obj.context, entity_id)
-            .then(result => { console.log(result); return result.data; })
-            .then(entity => {
-                if (entity === undefined) {
+            .then(result => result.data)
+            .then(item => {
+                if (item === undefined) {
                     return obj.mdq(entity_id).then(function(entity) {
-                        if (entity) {
-                            entity = obj.ps.update(obj.context, entity);
-                        }
-                        return entity;
+                        return obj.ps.update(obj.context, entity).then(result => result.data);
                     });
                 } else {
-                    return Promise.resolve(entity);
+                    return Promise.resolve(item);
                 }
             }).catch(ex => console.log(ex));
     }
