@@ -2,7 +2,6 @@ thiss.io clients
 ====
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/TheIdentitySelector/thiss-ds-js/graphs/commit-activity)
-[![Coverage Status](https://coveralls.io/repos/github/TheIdentitySelector/thiss-ds-js/badge.svg?branch=master)](https://coveralls.io/github/TheIdentitySelector/thiss-ds-js?branch=master)
 [![Build Status](https://travis-ci.com/TheIdentitySelector/thiss-ds-js.svg?branch=master)](https://travis-ci.com/TheIdentitySelector/thiss-ds-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/TheIdentitySelector/thiss-ds-js/badge.svg)](https://snyk.io/test/github/TheIdentitySelector/thiss-ds-js)
 [![Dependencies](https://david-dm.org/TheIdentitySelector/thiss-ds-js.svg)](https://david-dm.org/TheIdentitySelector/thiss-ds-js)
