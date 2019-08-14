@@ -26,6 +26,7 @@
     "@babel/register": "^7.4.0",
     "attest": "^1.0.1",
     "babel-cli": "^6.26.0",
+    "braces": "^3.0.2",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "ejs-loader": "^0.3.3",
