@@ -19,7 +19,7 @@ Start by creating an empty directory on a webserver and create in it an index.ht
     <main role="main">
       <h1>Search for your identity provider!</h1>
       <p>Enter an entityID and hit the lookup button</p>
-      <input role="button" id="lookup" value="https://idp.sunet.se/idp" type="text"/>
+      <input role="button" id="lookup" value="https://idp.unitedid.org/idp/shibboleth" type="text"/>
       <input type="button" id="submit" value="lookup"/>
       <div id="info"></div>
     </main>
