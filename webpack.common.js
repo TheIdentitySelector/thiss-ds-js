@@ -30,7 +30,7 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
       publicPath: "/",
       libraryTarget: 'umd',
-      library: '[name]',
+      library: 'thiss',
       globalObject: 'this'
   },
   module: {
