@@ -14,6 +14,15 @@ function _sha1_id(s) {
     return "{sha1}"+hex_sha1(s);
 }
 
+/**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  * 
+  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @returns {Promise} a Promise resolving an Object observing the discojson schema
+  */
+
 function json_mdq_get(id, mdq_url) {
     let opts = {method: 'GET', headers: {}};
     console.log(mdq_url + id + ".json");
@@ -39,6 +48,12 @@ function json_mdq_get(id, mdq_url) {
     });
 }
 
+/**
+ * Parse an array of querystring components into an Object
+ * 
+ * @params {paramsArray} [Array] an array of k=v parameters resulting from a split on '&' the Query string of a URI
+ * @returns an object with each k,v-pair as properties.
+ */
 export function parse_qs(paramsArray) {
     let params = {};
 
@@ -51,6 +66,15 @@ export function parse_qs(paramsArray) {
     return params;
 }
 
+/**
+ * Create a SAML discovery service protocol response URL from the entity_id property of the 
+ * entity object and the return and returnIDParam (if present) of the params object.
+ * Combine with a base URL to form a full discovery service response.
+ * 
+ * @param {entity} [Object] a discojson entity
+ * @param {params} [Object] an object from which 'returnIDParams' and 'return' will be used
+ * @returns {string} a query string
+ */
 export function ds_response_url(entity, params) {
     let response = params['return'];
     let qs = response.indexOf('?') === -1 ? '?' : '&';
@@ -67,8 +91,19 @@ export function ds_response_url(entity, params) {
     return response;
 }
 
+/**
+ * A DiscoveryService class representing the business logic of a SAML disocvery service.
+ *
+ */
 export class DiscoveryService {
 
+    /**
+     * The constructor takes 3 parameters:
+     *
+     * @param {mdq} [function (entity_id) {}|string] a callable or a URL to be used for MDQ-style lookups of entity objects.
+     * @param {persistence_url} [string] the URL of a persistence service
+     * @param {context} [string] the default context identifier
+     */
     constructor(mdq, persistence_url, context = "thiss.io") {
         console.log("making ds from "+mdq+" and "+persistence_url+" and "+context);
         if (typeof mdq === 'function') {
@@ -80,6 +115,10 @@ export class DiscoveryService {
         this.context = context;
     }
 
+    /**
+     * Preform callback on all entities in the persistence-service.
+     * @param {callback} [function (entity) {}] a callable taking a single entity parameter
+     */
     with_items(callback) {
         let obj = this;
         this.ps.entities(this.context).then(result => callback(result.data)).then(function(result) {
@@ -91,6 +130,12 @@ export class DiscoveryService {
         });
     }
 
+    /**
+     * Call do_saml_discovery_response and then set window.top.location.href to the discovery response URL
+     * This assumes that the code is running on the discovery service URL so the relative redirect works.
+     * 
+     * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
+     */
     saml_discovery_response(entity_id) {
         return this.do_saml_discovery_response(entity_id).then(item => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
@@ -102,10 +147,25 @@ export class DiscoveryService {
         });
     }
 
+    /**
+     * Shorthand for do_saml_discovery_response. Convenience method for the case when you want to 
+     * pre-populate (aka pin) an identity provider choice. The idea is to call this function, resolve
+     * the Promise but not redirect the user.
+     *
+     * @param {entity_id} [string] the entityID of the SAML identity provider
+     */
     pin(entity_id) {
         return this.do_saml_discovery_response(entity_id);
     }
 
+    /**
+     * The main entrypoint of the class. Performs the following actions in a Promise-chain:
+     * 1. fetches the entity from the persistence service
+     * 2. performs an MDQ lookup if the entity was not found
+     * 3. returns an item (entity+last_used timestamp)
+     * 
+     * @param {entity_id} [string] the entityID of the SAML identity provider
+     */
     do_saml_discovery_response(entity_id) {
         let obj = this;
         console.log(entity_id);
@@ -123,6 +183,11 @@ export class DiscoveryService {
             }).catch(ex => console.log(ex));
     }
 
+    /**
+     * Removes an entity by calling the remove function of the underlying PersistenceService instance.
+     * 
+     * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
+     */
     remove(entity_id) {
         return this.ps.remove(this.context, entity_id);
     }
