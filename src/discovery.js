@@ -127,17 +127,21 @@ export class DiscoveryService {
      * The constructor takes 3 parameters:
      *
      * @param {mdq} [function (entity_id) {}|string] a callable or a URL to be used for MDQ-style lookups of entity objects.
-     * @param {persistence_url} [string] the URL of a persistence service
+     * @param {persistence} [string|PersistenceService] the URL of a persistence service or an instance of the PersistanceService
      * @param {context} [string] the default context identifier
      */
-    constructor(mdq, persistence_url, context = "thiss.io") {
-        console.log("making ds from "+mdq+" and "+persistence_url+" and "+context);
+    constructor(mdq, persistence, context = "thiss.io") {
+        console.log("making ds from "+mdq+" and "+persistence+" and "+context);
         if (typeof mdq === 'function') {
             this.mdq = mdq;
         } else {
             this.mdq = function(entity_id) { return json_mdq_get(_sha1_id(entity_id), mdq) }
         }
-        this.ps = new PersistenceService(persistence_url);
+        if (persistence instanceof PersistenceService) {
+           this.ps = persistence;
+        } else {
+           this.ps = new PersistenceService(persistence);
+        }
         this.context = context;
     }
 

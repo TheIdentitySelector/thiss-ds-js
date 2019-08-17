@@ -10,6 +10,7 @@ describe('DiscoveryService', function() {
     beforeEach(function() {
        global.window = window;
        global.DiscoveryService = require('../src/discovery.js').DiscoveryService;
+       global.PersistenceService = require('../src/persist.js').PersistenceService;
        global.fetchMock = fetchMock;
     });
 
@@ -21,8 +22,14 @@ describe('DiscoveryService', function() {
         chai.expect(new DiscoveryService("http://localhost","http://localhost","foo")).to.exist;
     });
 
+    it('can construct by steps', function() {
+       let ps = new PersistenceService('http://localhost')
+       chai.expect(new DiscoveryService("http://localhost",ps,"foo")).to.exist;
+    });
+
     it('is able to run MDQ', function () {
-        let ds = new DiscoveryService("http://localhost","http://localhost/ps");
+        let ps = new PersistenceService('http://localhost/ps')
+        let ds = new DiscoveryService("http://localhost",ps);
         fetchMock.get('*',[{
             "domain": "example.com",
             "title": "Example.com Login",
