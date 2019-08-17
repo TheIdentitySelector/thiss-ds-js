@@ -22,7 +22,7 @@ function _sha1_id(s) {
   * @returns {Promise} a Promise resolving an list of json objects
   */
 
-function json_mdq(url) {
+export function json_mdq(url) {
     let opts = {method: 'GET', headers: {'Accept':'application/json'}};
     return fetch(url,opts).then(function (response) {
        if (response.status == 404) {
@@ -47,7 +47,7 @@ function json_mdq(url) {
   * @returns {Promise} a Promise resolving an Object observing the discojson schema
   */
 
-function json_mdq_get(id, mdq_url) {
+export function json_mdq_get(id, mdq_url) {
     let opts = {method: 'GET', headers: {}};
     console.log(mdq_url + id + ".json");
     return json_mdq(mdq_url + id + ".json").then(function(data) {
@@ -69,8 +69,8 @@ function json_mdq_get(id, mdq_url) {
   * @returns {Promise} a Promise resolving an list of Object observing the discojson schema
   */
 
-function json_mdq_search(text, mdq_url) {
-   let remote = search_base + "?query=" + text;
+export function json_mdq_search(text, mdq_url) {
+   let remote = mdq_url + "?q=" + text;
    return json_mdq(remote);
 }
 
