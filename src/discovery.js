@@ -18,17 +18,15 @@ function _sha1_id(s) {
   * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
   * which must be resolved before the object can be accessed.
   * 
-  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
-  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
-  * @returns {Promise} a Promise resolving an Object observing the discojson schema
+  * @param {url} [string] an URL
+  * @returns {Promise} a Promise resolving an list of json objects
   */
 
-function json_mdq_get(id, mdq_url) {
-    let opts = {method: 'GET', headers: {}};
-    console.log(mdq_url + id + ".json");
-    return fetch(mdq_url + id + ".json",opts).then(function (response) {
+function json_mdq(url) {
+    let opts = {method: 'GET', headers: {'Accept':'application/json'}};
+    return fetch(url,opts).then(function (response) {
        if (response.status == 404) {
-           throw new URIError("Entity not found in MDQ server");
+           throw new URIError(`${url}: not found`);
        }
        return response;
     }).then(function (response) {
@@ -37,20 +35,48 @@ function json_mdq_get(id, mdq_url) {
             return response.json();
         }
         throw new SyntaxError("MDQ didn't provide a JSON response");
-    }).then(function(data) {
+    })
+}
+
+/**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  *
+  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @returns {Promise} a Promise resolving an Object observing the discojson schema
+  */
+
+function json_mdq_get(id, mdq_url) {
+    let opts = {method: 'GET', headers: {}};
+    console.log(mdq_url + id + ".json");
+    return json_mdq(mdq_url + id + ".json").then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
         return data;
     }).catch(function(error) {
         console.log(error);
-        //Promise.reject(error);
     });
 }
 
 /**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  *
+  * @param {text} [string] the string to search for
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @returns {Promise} a Promise resolving an list of Object observing the discojson schema
+  */
+
+function json_mdq_search(text, mdq_url) {
+   let remote = search_base + "?query=" + text;
+   return json_mdq(remote);
+}
+
+/**
  * Parse an array of querystring components into an Object
- * 
+ *
  * @params {paramsArray} [Array] an array of k=v parameters resulting from a split on '&' the Query string of a URI
  * @returns an object with each k,v-pair as properties.
  */
