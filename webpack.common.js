@@ -15,6 +15,15 @@ module.exports = {
       'thiss-ds': ['./src/clients.js'],
       'demo': ['./src/demo.js'],
   },
+  node: {
+      console: false,
+      global: true,
+      process: true,
+      __filename: 'mock',
+      __dirname: 'mock',
+      Buffer: false,
+      setImmediate: true
+  },
   plugins: [
       new DotEnv({systemvars: true}),
       new CleanWebpackPlugin(),

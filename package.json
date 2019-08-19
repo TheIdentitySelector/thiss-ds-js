@@ -48,6 +48,7 @@
     "clean-webpack-plugin": "^2.0.1",
     "dotenv-webpack": "^1.7.0",
     "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.0",
     "webpack-merge": "^4.2.1"
   },
