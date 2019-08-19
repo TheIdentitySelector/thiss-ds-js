@@ -1,0 +1,13 @@
+builders:
+  - script
+triggers:
+  cron: "@weekly"
+slack:
+  room: "devops-builds"
+clean_workspace: true
+build_in_docker:
+  image: docker.sunet.se/sunet/docker-jenkins-node-job
+archive_artifacts:
+  include: dist/*
+script:
+  - "make setup all"
