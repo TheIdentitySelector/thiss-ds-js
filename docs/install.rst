@@ -26,5 +26,5 @@ CDN (thanks to [unpkg.com](https://unpkg.com))
 
 .. code-block:: html
 
-  <script src="//unpkg.com/browse/@theidentityselector/thiss-ds@1.0.5" />
+  <script src="//unpkg.com/browse/@theidentityselector/thiss-ds" />
 
