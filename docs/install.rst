@@ -22,7 +22,7 @@ ES6-style
   import {DiscoveryService} from "thiss-ds";
   import {PersistenceService} from "thiss-ds";
 
-CDN (thanks to [unpkg.com](https://unpkg.com))
+CDN (thanks to `unpkg.com <https://unpkg.com>`_)
 
 .. code-block:: html
 
