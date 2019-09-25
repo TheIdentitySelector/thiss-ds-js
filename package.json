@@ -23,12 +23,18 @@
   "author": "Leif Johansson <leifj@sunet.se>",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "post-robot": "^10.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.0",
     "@babel/register": "^7.4.0",
-    "attest": "^1.0.1",
     "babel-cli": "^6.26.0",
-    "braces": "^3.0.2",
+    "babel-loader": "^8.0.5",
     "chai": "^4.2.0",
+    "clean-webpack-plugin": "^2.0.1",
     "coveralls": "^3.0.3",
+    "dotenv-webpack": "^1.7.0",
     "ejs-loader": "^0.3.3",
     "fetch-mock": "^7.3.1",
     "html-webpack-plugin": "^3.2.0",
@@ -37,19 +43,11 @@
     "mock-browser": "^0.92.14",
     "node-fetch": "^2.3.0",
     "nyc": "^14.1.1",
-    "post-robot": "^10.0.14",
     "snyk": "^1.140.0",
-    "webpack-dev-server": "^3.2.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.0",
-    "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^2.0.1",
-    "dotenv-webpack": "^1.7.0",
     "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
     "webpack-merge": "^4.2.1"
   },
   "snyk": true
