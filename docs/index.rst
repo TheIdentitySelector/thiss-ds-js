@@ -17,6 +17,7 @@ This is the client API package for services built on the thiss.io software - eg 
    usage
    example
    api/persist
+   api/example-persistenceService
    api/discovery
 
 
