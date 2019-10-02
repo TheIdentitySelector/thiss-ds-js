@@ -1,7 +1,7 @@
 Example: Retrieval of entities using the PersistenceService API
 ================================================================
 
-To illustrate how to use the PersistenceService API we will create and walk through a tiny persistence service call. This represents the smallest (and arguably least practically useful) implementation to retrieve the stored entities from the persistence service. While not useful as such it can serve as a starting point for further work. This example can be found as index.html in the thiss-ds-js distribution.
+To illustrate how to use the PersistenceService API we will create and walk through a tiny persistence service call. This represents the smallest (and arguably least practically useful) implementation to retrieve the stored entities from the persistence service. While not useful as such it can serve as a starting point for further work. This example can be found as example-persistenceService.html in the thiss-ds-js distribution.
 
 Start by creating an empty directory on a webserver and create in it an index.html with the following simple markup:
 

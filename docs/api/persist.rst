@@ -9,6 +9,9 @@ Classes
   :members:
 
 
-Example:
-  `Example using PersistenceService.entities <example-persistenceService.html>`_
+Examples
+--------
+  * `Example using PersistenceService.entities <example-persistenceService.html>`_
+  
+  * `Example using PersistenceService.update <update-persistenceService.html>`_
 
