@@ -9,7 +9,7 @@ Welcome to thiss.io clients's documentation!
 This is the client API package for services built on the thiss.io software - eg use.thiss.io or service.seamlessaccess.org. The package contains a set of javascript APIs for talking to a shared persistence service for Identity Provider selection and an implementation of the SAML Identity Provider Protocol in javascript.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    intro
