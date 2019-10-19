@@ -1,5 +1,5 @@
-Example: Retrieval of entities using the PersistenceService API
-================================================================
+Example: Upload entity to the PersistenceService using the PersistenceService API
+=================================================================================
 
 To illustrate how to use the PersistenceService API we will create and walk through a tiny persistence service call. This represents the smallest (and arguably least practically useful) implementation to update and store a new entity to the persistence service. While not useful as such it can serve as a starting point for further work. This example can be found as update-persistenceService.html in the thiss-ds-js distribution.
 
