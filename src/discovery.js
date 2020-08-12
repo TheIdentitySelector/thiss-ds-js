@@ -166,8 +166,8 @@ export class DiscoveryService {
      * 
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
-    saml_discovery_response(entity_id) {
-        return this.do_saml_discovery_response(entity_id).then(item => {
+    saml_discovery_response(entity_id, persist=true) {
+        return this.do_saml_discovery_response(entity_id, persist).then(item => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
             return ds_response_url(item.entity, params);
         }).then(url => {
@@ -185,7 +185,7 @@ export class DiscoveryService {
      * @param {entity_id} [string] the entityID of the SAML identity provider
      */
     pin(entity_id) {
-        return this.do_saml_discovery_response(entity_id);
+        return this.do_saml_discovery_response(entity_id, true);
     }
 
     /**
@@ -195,8 +195,9 @@ export class DiscoveryService {
      * 3. returns an item (entity+last_used timestamp)
      * 
      * @param {entity_id} [string] the entityID of the SAML identity provider
+     * @param (persist) [boolean] set to true (default) to persist the discovery metadata
      */
-    do_saml_discovery_response(entity_id) {
+    do_saml_discovery_response(entity_id, persist=true) {
         let obj = this;
         console.log(entity_id);
         console.log(obj.context);
@@ -204,8 +205,18 @@ export class DiscoveryService {
             .then(result => result.data)
             .then(item => {
                 if (item === undefined) {
-                    return obj.mdq(entity_id).then(function(entity) {
-                        return obj.ps.update(obj.context, entity).then(result => result.data);
+                    return obj.mdq(entity_id).then(entity => {
+                        if (persist) {
+                            return obj.ps.update(obj.context, entity).then(result => result.data);
+                        } else {
+                            let now = Date.now()
+                            let item = {
+                                entity: entity,
+                                last_refresh: now,
+                                last_use: now
+                            }
+                            return Promise.resolve(item);
+                        }
                     });
                 } else {
                     return Promise.resolve(item);

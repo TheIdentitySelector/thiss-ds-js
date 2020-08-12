@@ -27,13 +27,16 @@ export class PersistenceService {
      * URL provided to the constructor.
      *
      *  @param {url} The URL of the persistence service - eg https://use.thiss.io/ps/
-     *  @param {opts} [Object] An object containing options (unused)
+     *  @param {opts} [Object] An object containing options. Supported keys:
+     *      @param {opts.apikey} [str] An optional API-key
      *  
      */
     constructor(url, opts) {
         this._url = url;
+        opts |= {};
         this._frame = this.create_iframe(url);
         this.dst = this._frame.contentWindow || this._frame;
+        this.apikey = opts.apikey || undefined;
     }
 
     create_iframe(url) {
@@ -56,7 +59,7 @@ export class PersistenceService {
      *  @returns {Promise} A Promise that resolves to an item containing the provided entity on success.
      */
     update(context, entity) {
-        return postRobot.send(this.dst, 'update', {"context": context, "entity": entity});
+        return postRobot.send(this.dst, 'update', {"context": context, "entity": entity, "apikey": this.apikey});
     }
 
     /**
@@ -68,7 +71,7 @@ export class PersistenceService {
      *  @returns {Promise} A Promise that resolves to a list of items on success.
      */
     entities(context) {
-        return postRobot.send(this.dst, 'entities', {"context": context});
+        return postRobot.send(this.dst, 'entities', {"context": context, "apikey": this.apikey});
     }
     
     /**
@@ -79,7 +82,7 @@ export class PersistenceService {
      *
      */
     remove(context, entity_id) {
-        return postRobot.send(this.dst, 'remove', {"context": context, "entity_id": entity_id});
+        return postRobot.send(this.dst, 'remove', {"context": context, "entity_id": entity_id, "apikey": this.apikey});
     }
 
     /**
@@ -90,7 +93,7 @@ export class PersistenceService {
      *
      */
     entity(context, entity_id) {
-        return postRobot.send(this.dst, 'entity', {"context": context, "entity_id": entity_id});
+        return postRobot.send(this.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": this.apikey});
     }
 
 }

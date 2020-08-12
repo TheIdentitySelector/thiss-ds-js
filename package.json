@@ -1,6 +1,6 @@
 {
   "name": "@theidentityselector/thiss-ds",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A set of clients for the thiss.io service",
   "main": "dist/thiss-ds.js",
   "homepage": "https://thiss.io",
@@ -43,11 +43,11 @@
     "mock-browser": "^0.92.14",
     "node-fetch": "^2.3.0",
     "nyc": "^14.1.1",
-    "snyk": "^1.140.0",
+    "snyk": "^1.373.1",
     "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "^3.4.1",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.1"
   },
   "snyk": true

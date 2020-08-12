@@ -34,16 +34,18 @@ In order to implement a simple SAML discovery response:
 
 .. code-block:: js
 
-  ds.saml_discovery_response(entity_id)
+  ds.saml_discovery_response(entity_id, persist)
 
 
 This call first calls the persistence service to record the users choice (possibly refreshing metadata using the mdq first) and then returns a SAML identity provider discovery protocol response. This could for instance called from an "onclick" method in a UI. In a typical implementation the mdq method is used to lookup metadata which is then used to drive the UI. When the user selects a particular IdP the above call persists the users choice and returns the discovery response via the SAML identity provider discovery protocol (which is essentially just a redirect) by setting the window.location.href to the assembled return URL.
+
+The second parameter (persist) is a boolean (which by default is set to true) which if true causes the metadata returned from the lookup to be persisted in browser local store via the persistence service.
 
 For situations where it is necessary to have more control over how the discovery response is created the following call is available:
 
 .. code-block:: js
  
-  ds.do_saml_discovery_response(entity_id).then(entity => {
+  ds.do_saml_discovery_response(entity_id, persist).then(entity => {
    // ... do something with entity JSON
   });
 
