@@ -10,7 +10,7 @@ function _timestamp() {
    return new Date().getTime();
 }
 
-function _sha1_id(s) {
+export function sha1_id(s) {
     return "{sha1}"+hex_sha1(s);
 }
 
@@ -22,8 +22,11 @@ function _sha1_id(s) {
   * @returns {Promise} a Promise resolving an list of json objects
   */
 
-export function json_mdq(url) {
-    let opts = {method: 'GET', headers: {'Accept':'application/json'}};
+export function json_mdq(url, opts = {}) {
+    if (!opts) {
+        opts = {}
+    }
+    opts = Object.assign(opts, {method: 'GET', headers: {'Accept':'application/json'}});
     return fetch(url,opts).then(function (response) {
        if (response.status == 404) {
            throw new URIError(`${url}: not found`);
@@ -47,10 +50,9 @@ export function json_mdq(url) {
   * @returns {Promise} a Promise resolving an Object observing the discojson schema
   */
 
-export function json_mdq_get(id, mdq_url) {
-    let opts = {method: 'GET', headers: {}};
+export function json_mdq_get(id, mdq_url, opts = {}) {
     console.log(mdq_url + id + ".json");
-    return json_mdq(mdq_url + id + ".json").then(function(data) {
+    return json_mdq(mdq_url + id + ".json", opts).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
@@ -135,7 +137,7 @@ export class DiscoveryService {
         if (typeof mdq === 'function') {
             this.mdq = mdq;
         } else {
-            this.mdq = function(entity_id) { return json_mdq_get(_sha1_id(entity_id), mdq) }
+            this.mdq = function(entity_id) { return json_mdq_get(sha1_id(entity_id), mdq) }
         }
         if (persistence instanceof PersistenceService) {
            this.ps = persistence;
