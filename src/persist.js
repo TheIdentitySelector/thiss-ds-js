@@ -37,6 +37,8 @@ export class PersistenceService {
         this._frame = this.create_iframe(url);
         this.dst = this._frame.contentWindow || this._frame;
         this.apikey = opts.apikey || undefined;
+        this.sandboxOverrideAttributes = opts.sandboxOverrideAttributes || undefined;
+        this.cspValues = opts.cspValues || undefined;
     }
 
     create_iframe(url) {
@@ -46,6 +48,29 @@ export class PersistenceService {
         frame.style['top'] = '-999px';
         frame.style['left'] = '-999px';
         frame.id = "ps_"+randID();
+
+        // Sandbox allows us to be very specific of what is run inside the iframe and avoid hacking escalation,
+        // for instance:
+        //   * block form submission
+        //   * prevent the content to navigate its top-level browsing context
+        if (this.sandboxOverrideAttributes === undefined) {
+            // Allow scripts to run and only allow the scripts from the embedded site, and nothing else that might
+            // cause escalation and hijack the users client focus
+            frame.sandbox += ['allow-scripts allow-same-origin']; // Default sandbox attributes
+        } else {
+            frame.sandbox += [this.sandboxOverrideAttributes]; // Extra adding of user-defined sandbox attributes
+        }
+
+        // Force csp attribute on the iframe to make sure the content matches a security policy.
+        if (this.cspValues !== undefined) {
+            // This is if the server defined in https://github.com/TheIdentitySelector/origin.thiss.io can return a CSP
+            // header or https://w3c.github.io/webappsec-cspee/#allow-csp-from-header which can then be reflected in the
+            // iframe csp attribute.
+            // Looking at the repo, it is unclear how it is deployed, so I am unsure about how difficult it is to add
+            // a header to the http request.
+            frame.csp += this.cspValues;
+        }
+
         window.document.body.appendChild(frame);
         frame.src = url;
         return frame;
