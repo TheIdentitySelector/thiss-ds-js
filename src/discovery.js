@@ -102,7 +102,21 @@ export function parse_qs(paramsArray) {
  * @returns {string} a query string
  */
 export function ds_response_url(entity, params) {
+    /* The `return` query-param holds the URL where the response is returned.
+     * It is set by the caller and should correspond to one of the SAML
+     * DiscoveryResponse elements.
+     *
+     * Since this is controlled by the caller, We must ensure that it is
+     * correct and sanitize it. Ideally, we should compare it against the
+     * Location attribute of the known <DiscoveryResponse> elements.
+     *
+     * If the `return` query-param is not a valid URL we throw an error.
+     */
     let response = params['return'];
+    if (!response.startsWith('http://') && !response.startsWith('https://')) {
+        throw new Error(`Invalid return query param: ${response}`)
+    }
+
     let qs = response.indexOf('?') === -1 ? '?' : '&';
     let returnIDParam = params['returnIDParam'];
     let entity_id = entity.entity_id;
