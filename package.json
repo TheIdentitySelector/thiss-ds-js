@@ -1,6 +1,6 @@
 {
   "name": "@theidentityselector/thiss-ds",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A set of clients for the thiss.io service",
   "main": "dist/thiss-ds.js",
   "homepage": "https://thiss.io",
@@ -12,7 +12,7 @@
     "url": "https://github.com/TheIdentitySelector/thiss-ds-js/issues"
   },
   "scripts": {
-    "test": "./node_modules/.bin/nyc --reporter=lcov -- ./node_modules/mocha/bin/_mocha --require @babel/register",
+    "test": "./node_modules/.bin/nyc --reporter=lcov -- ./node_modules/mocha/bin/_mocha --require @babel/register --require jsdom-global/register",
     "lint": "node_modules/.bin/goodparts src",
     "cover": "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
@@ -39,9 +39,11 @@
     "fetch-mock": "^7.3.1",
     "html-webpack-plugin": "^3.2.0",
     "isomorphic-fetch": "^2.2.1",
+    "jsdom": "16.4.0",
+    "jsdom-global": "3.0.2",
     "mocha": "^6.2.0",
     "mock-browser": "^0.92.14",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "nyc": "^14.1.1",
     "snyk": "^1.373.1",
     "webpack": "^4.29.6",
