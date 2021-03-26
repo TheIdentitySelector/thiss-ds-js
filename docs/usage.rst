@@ -4,11 +4,11 @@ Using thiss-ds
 Overview
 --------
 
-There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersitenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage (using the `js-storage package <https://www.npmjs.com/package/js-storage>`_). The namespace is called the "context" below (more about how contexts work later).
+There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersistenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage (using the `js-storage package <https://www.npmjs.com/package/js-storage>`_). The namespace is called the "context" below (more about how contexts work later).
 
 The DiscoveryService class is essentially a reference to an instance of the PersistenceService and a metadata query service (MDQ for short) which relies on fetch to retrieve JSON-objects that represent known identity providers. This class also contains some utility methods providing a way to implement SAML Identity Provider Discovery v1.0.
 
-Create an instance of the DiscoveryService object thus (where my_context is a string or unkown which makes the instance default to the default (or global) context:
+Create an instance of the DiscoveryService object thus (where `my_context` is a string or unknown which makes the instance default to the default (or global) context:
 
 .. code-block:: js
 
@@ -37,7 +37,7 @@ In order to implement a simple SAML discovery response:
   ds.saml_discovery_response(entity_id, persist)
 
 
-This call first calls the persistence service to record the users choice (possibly refreshing metadata using the mdq first) and then returns a SAML identity provider discovery protocol response. This could for instance called from an "onclick" method in a UI. In a typical implementation the mdq method is used to lookup metadata which is then used to drive the UI. When the user selects a particular IdP the above call persists the users choice and returns the discovery response via the SAML identity provider discovery protocol (which is essentially just a redirect) by setting the window.location.href to the assembled return URL.
+This call first calls the persistence service to record the users choice (possibly refreshing metadata using the mdq first) and then returns a SAML identity provider discovery protocol response. This could for instance called from an "onclick" method in a UI. In a typical implementation the mdq method is used to lookup metadata which is then used to drive the UI. When the user selects a particular IdP the above call persists the users choice and returns the discovery response via the SAML identity provider discovery protocol (which is essentially just a redirect) by setting the `window.location.href` to the assembled return URL.
 
 The second parameter (persist) is a boolean (which by default is set to true) which if true causes the metadata returned from the lookup to be persisted in browser local store via the persistence service.
 
@@ -90,4 +90,4 @@ The following fields are currently used:
 Context
 -------
 
-The PersistenceService is initialized with a context. The context is a namespace string passed with each call to the API. The context is used to differentiate the persistence local storage to avoid overlap. This may seem counter intutitive as the point of the thiss.io persistence service is to share IdP choices among several services. However the goal is really to share IdP choice among services that share a common view of metadata. In order to make it possible for service to have overlapping or even conflicting metadata "views" the context can be used to differentiate between "metadata domains". A contexts may be protected in a given persistence service ORIGIN so some operations (such as removing a choice) may fail. Failures are always handled as rejected Promises and should be handled by the caller in the appropriate way.
+The PersistenceService is initialized with a context. The context is a namespace string passed with each call to the API. The context is used to differentiate the persistence local storage to avoid overlap. This may seem counter intuitive as the point of the thiss.io persistence service is to share IdP choices among several services. However the goal is really to share IdP choice among services that share a common view of metadata. In order to make it possible for service to have overlapping or even conflicting metadata "views" the context can be used to differentiate between "metadata domains". A contexts may be protected in a given persistence service ORIGIN so some operations (such as removing a choice) may fail. Failures are always handled as rejected Promises and should be handled by the caller in the appropriate way.
