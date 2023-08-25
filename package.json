@@ -17,7 +17,8 @@
     "cover": "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "snyk-protect": "snyk protect"
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Leif Johansson <leifj@sunet.se>",
   "license": "BSD-2-Clause",
@@ -49,5 +50,5 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.1"
   },
-  "snyk": false
+  "snyk": true
 }
