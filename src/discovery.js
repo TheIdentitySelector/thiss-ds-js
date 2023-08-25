@@ -72,11 +72,6 @@ export function json_mdq_get(id, mdq_url) {
 export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     let params = []
 
-    console.log('json_mdq_search text: ', text)
-    console.log('json_mdq_search mdq_url: ', mdq_url)
-    console.log('json_mdq_search entityID: ', entityID)
-    console.log('json_mdq_search trustProfile: ', trustProfile)
-
     params.push(`q=${text}`)
     if (entityID) {
         params.push(`trustProfile=${entityID}`)
