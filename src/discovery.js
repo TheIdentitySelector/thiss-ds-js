@@ -17,7 +17,7 @@ function _sha1_id(s) {
 /**
   * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
   * which must be resolved before the object can be accessed.
-  * 
+  *
   * @param {url} [string] an URL
   * @returns {Promise} a Promise resolving an list of json objects
   */
@@ -69,9 +69,20 @@ export function json_mdq_get(id, mdq_url) {
   * @returns {Promise} a Promise resolving an list of Object observing the discojson schema
   */
 
-export function json_mdq_search(text, mdq_url) {
-   let remote = mdq_url + "?q=" + text;
-   return json_mdq(remote);
+export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
+    let params = []
+
+    params.push(`q=${text}`)
+    if (entityID) {
+        params.push(`trustProfile=${entityID}`)
+    }
+
+    if (trustProfile) {
+        params.push(`trustProfile=${trustProfile}`)
+    }
+
+    let remote = `${mdq_url}?${params.join('&')}`
+    return json_mdq(remote);
 }
 
 /**
@@ -93,10 +104,10 @@ export function parse_qs(paramsArray) {
 }
 
 /**
- * Create a SAML discovery service protocol response URL from the entity_id property of the 
+ * Create a SAML discovery service protocol response URL from the entity_id property of the
  * entity object and the return and returnIDParam (if present) of the params object.
  * Combine with a base URL to form a full discovery service response.
- * 
+ *
  * @param {entity} [Object] a discojson entity
  * @param {params} [Object] an object from which 'returnIDParams' and 'return' will be used
  * @returns {string} a query string
@@ -177,7 +188,7 @@ export class DiscoveryService {
     /**
      * Call do_saml_discovery_response and then set window.top.location.href to the discovery response URL
      * This assumes that the code is running on the discovery service URL so the relative redirect works.
-     * 
+     *
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
     saml_discovery_response(entity_id, persist=true) {
@@ -192,7 +203,7 @@ export class DiscoveryService {
     }
 
     /**
-     * Shorthand for do_saml_discovery_response. Convenience method for the case when you want to 
+     * Shorthand for do_saml_discovery_response. Convenience method for the case when you want to
      * pre-populate (aka pin) an identity provider choice. The idea is to call this function, resolve
      * the Promise but not redirect the user.
      *
@@ -207,7 +218,7 @@ export class DiscoveryService {
      * 1. fetches the entity from the persistence service
      * 2. performs an MDQ lookup if the entity was not found
      * 3. returns an item (entity+last_used timestamp)
-     * 
+     *
      * @param {entity_id} [string] the entityID of the SAML identity provider
      * @param (persist) [boolean] set to true (default) to persist the discovery metadata
      */
@@ -240,7 +251,7 @@ export class DiscoveryService {
 
     /**
      * Removes an entity by calling the remove function of the underlying PersistenceService instance.
-     * 
+     *
      * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
      */
     remove(entity_id) {
