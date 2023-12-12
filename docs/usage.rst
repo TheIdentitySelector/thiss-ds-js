@@ -84,7 +84,7 @@ The following fields are currently used:
     "entity_id": "the entityID of the IdP",
     "hidden": "if hide-from-discovery is set",
     "scope": "a comma-separated list of domains/scopes associated with the IdP",
-    "id": "sha1 ID as specified by the MDQ spec"
+    "id": "sha1 ID as specified by the MDQ spec",
   }
 
 Context
