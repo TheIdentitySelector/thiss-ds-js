@@ -47,10 +47,18 @@ export function json_mdq(url) {
   * @returns {Promise} a Promise resolving an Object observing the discojson schema
   */
 
-export function json_mdq_get(id, mdq_url) {
+export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     let opts = {method: 'GET', headers: {}};
-    console.log(mdq_url + id + ".json");
-    return json_mdq(mdq_url + id + ".json").then(function(data) {
+    let url = mdq_url + id + ".json"
+    if (entity_id) {
+        url = url + `/${encodeURIComponent(entity_id)}`
+
+        if (trust_profile) {
+            url = url + `/${trust_profile}`
+        }
+    }
+
+    return json_mdq(url).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
@@ -74,7 +82,7 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
 
     params.push(`q=${text}`)
     if (entityID) {
-        params.push(`trustProfile=${entityID}`)
+        params.push(`entityID=${entityID}`)
     }
 
     if (trustProfile) {
@@ -130,6 +138,7 @@ export function ds_response_url(entity, params) {
 
     let qs = response.indexOf('?') === -1 ? '?' : '&';
     let returnIDParam = params['returnIDParam'];
+
     let entity_id = entity.entity_id;
     if (!returnIDParam) {
         returnIDParam = "entityID";
@@ -155,12 +164,11 @@ export class DiscoveryService {
      * @param {persistence} [string|PersistenceService] the URL of a persistence service or an instance of the PersistanceService
      * @param {context} [string] the default context identifier
      */
-    constructor(mdq, persistence, context = "thiss.io") {
-        console.log("making ds from "+mdq+" and "+persistence+" and "+context);
+    constructor(mdq, persistence, context = "thiss.io", entity_id, trust_profile) {
         if (typeof mdq === 'function') {
             this.mdq = mdq;
         } else {
-            this.mdq = function(entity_id) { return json_mdq_get(_sha1_id(entity_id), mdq) }
+            this.mdq = function(idp) { return json_mdq_get(_sha1_id(idp), trust_profile, entity_id, mdq) }
         }
         if (persistence instanceof PersistenceService) {
            this.ps = persistence;
@@ -191,8 +199,8 @@ export class DiscoveryService {
      *
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
-    saml_discovery_response(entity_id, persist=true) {
-        return this.do_saml_discovery_response(entity_id, persist).then(item => {
+    saml_discovery_response(entity_id, trust_profile, persist=true) {
+        return this.do_saml_discovery_response(entity_id, trust_profile, persist).then(item => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
             return ds_response_url(item.entity, params);
         }).then(url => {
@@ -222,10 +230,9 @@ export class DiscoveryService {
      * @param {entity_id} [string] the entityID of the SAML identity provider
      * @param (persist) [boolean] set to true (default) to persist the discovery metadata
      */
-    do_saml_discovery_response(entity_id, persist=true) {
+    do_saml_discovery_response(entity_id, trust_profile, persist=true) {
         let obj = this;
-        console.log(entity_id);
-        console.log(obj.context);
+
         return obj.ps.entity(obj.context, entity_id)
             .then(result => result.data)
             .then(item => {

@@ -2,7 +2,7 @@ const postRobot = require("post-robot");
 
 /**
   * Generate a 32 byte random identifier.
-  * 
+  *
   * @returns {string} a random string
   */
 
@@ -12,10 +12,10 @@ function randID() {
 
 /**
  *
- * A client for the thiss.io persistence service. The Persistence service methods all follow 
+ * A client for the thiss.io persistence service. The Persistence service methods all follow
  * the same pattern - a call that returns a Promise that resolves to one or more item Objects.
  * An item is an Object with two properties:
- * 
+ *
  *  @param {entity}: An entity object (discojson schema)
  *  @param {last_refresh}: A timestamp when this entity was last updated (used)
  */
@@ -29,7 +29,7 @@ export class PersistenceService {
      *  @param {url} The URL of the persistence service - eg https://use.thiss.io/ps/
      *  @param {opts} [Object] An object containing options. Supported keys:
      *      @param {opts.apikey} [str] An optional API-key
-     *  
+     *
      */
     constructor(url, opts) {
         this._url = url;
@@ -53,7 +53,7 @@ export class PersistenceService {
 
     /**
      * Update an an entity object in browser local store tied to the ORIGIN of the service URL.
-     * 
+     *
      *  @param {context} [str] The context to write to
      *  @param {entity} [Object] A js object representing an entity. Uses the discojson schema.
      *  @returns {Promise} A Promise that resolves to an item containing the provided entity on success.
@@ -63,20 +63,20 @@ export class PersistenceService {
     }
 
     /**
-     * Returns 0-3 of the most recently used entities as a list of item Objects. Be sure to 
-     * examine the last_time property to make sure the provided entities are "recent" enough 
+     * Returns 0-3 of the most recently used entities as a list of item Objects. Be sure to
+     * examine the last_time property to make sure the provided entities are "recent" enough
      * to be used.
-     * 
+     *
      *  @param {context} [str] The context to write to
      *  @returns {Promise} A Promise that resolves to a list of items on success.
      */
     entities(context) {
         return postRobot.send(this.dst, 'entities', {"context": context, "apikey": this.apikey});
     }
-    
+
     /**
      * Remove an entity from the context.
-     *  
+     *
      *  @param {entity_id} [string] The entityID of the item to be removed.
      *  @returns {Promise} A Promise that resolves to nothing on success.
      *
@@ -87,7 +87,7 @@ export class PersistenceService {
 
     /**
      * Fetch an entity from the context.
-     *  
+     *
      *  @param {entity_id} [string] The entityID of the item to be removed.
      *  @returns {Promise} A Promise that resolves to an item containing the entity on success.
      *
