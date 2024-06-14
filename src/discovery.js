@@ -24,6 +24,7 @@ function _sha1_id(s) {
 
 export function json_mdq(url) {
     let opts = {method: 'GET', headers: {'Accept':'application/json'}};
+    console.log('json_mdq url: ', url)
     return fetch(url,opts).then(function (response) {
        if (response.status == 404) {
            throw new URIError(`${url}: not found`);
@@ -50,6 +51,7 @@ export function json_mdq(url) {
 export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     let opts = {method: 'GET', headers: {}};
     let url = mdq_url + id + ".json"
+/*
     if (entity_id) {
         url = url + `/${encodeURIComponent(entity_id)}`
 
@@ -57,7 +59,22 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
             url = url + `/${trust_profile}`
         }
     }
+*/
+    if (entity_id) {
+        let params = []
 
+        if (entity_id) {
+            params.push(`entityID=${entity_id}`)
+        }
+
+        if (trust_profile) {
+            params.push(`trustProfile=${trust_profile}`)
+        }
+
+        url = `${url}?${params.join('&')}`
+    }
+
+    console.log('json_mdq_get: ', url)
     return json_mdq(url).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
@@ -90,6 +107,7 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     }
 
     let remote = `${mdq_url}?${params.join('&')}`
+    console.log('json_mdq_search url: ', remote)
     return json_mdq(remote);
 }
 
