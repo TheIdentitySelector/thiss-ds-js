@@ -1,9 +1,12 @@
-const assert = require('assert');
-const chai = require('chai');
-const MockBrowser = require('mock-browser').mocks.MockBrowser;
-const window = new MockBrowser().getWindow();
-const fetchMock = require('fetch-mock');
-const { Response, Request, Headers, fetch } = require('isomorphic-fetch');
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import { assert, expect } from 'chai';
+import fetchMock from 'fetch-mock';
+import pkgIsoFetch from 'isomorphic-fetch';
+const { Response, Request, Headers, fetch } = pkgIsoFetch;
+import { JSDOM } from "jsdom";
+
+const window = new JSDOM().window;
 
 describe('DiscoveryService', function() {
 
@@ -15,16 +18,16 @@ describe('DiscoveryService', function() {
     });
 
     it('exists', function() {
-        chai.expect(DiscoveryService).to.exist;
+        expect(DiscoveryService).to.exist;
     });
 
     it('has a working constructor', function() {
-        chai.expect(new DiscoveryService("http://localhost","http://localhost","foo")).to.exist;
+        expect(new DiscoveryService("http://localhost","http://localhost","foo")).to.exist;
     });
 
     it('can construct by steps', function() {
        let ps = new PersistenceService('http://localhost')
-       chai.expect(new DiscoveryService("http://localhost",ps,"foo")).to.exist;
+       expect(new DiscoveryService("http://localhost",ps,"foo")).to.exist;
     });
 
     it('is able to run MDQ', function () {
@@ -40,8 +43,8 @@ describe('DiscoveryService', function() {
         }]);
         ds.mdq('{sha1}d0469ad9c683b6cf90de8210fba9a15b75fd3b2e')
             .then(function (entity) {
-                chai.expect(entity).to.exist;
-                chai.expect(entity.entityID).to.equal("https://idp.example.com/idp");
+                expect(entity).to.exist;
+                expect(entity.entityID).to.equal("https://idp.example.com/idp");
             });
         fetchMock.reset();
     });

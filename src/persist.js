@@ -1,4 +1,4 @@
-const postRobot = require("post-robot");
+import postRobot from "post-robot";
 
 /**
   * Generate a 32 byte random identifier.

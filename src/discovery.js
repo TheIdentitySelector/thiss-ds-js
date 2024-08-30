@@ -1,5 +1,5 @@
-import {PersistenceService} from "./persist";
-const hex_sha1 = require('./sha1.js').default;
+import {PersistenceService} from "./persist.js";
+import hex_sha1 from './sha1.js';
 const cache_time = 60 * 10 * 1000; // 10 minutes
 
 function _timestamp() {
