@@ -52,6 +52,7 @@ export function json_mdq(url) {
 
 export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
+    console.log('json_mdq_get url: ', url)
 
     if (entity_id && trust_profile) {
         url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trust_profile}`
@@ -79,11 +80,14 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
 export function json_mdq_get_sp(entityID, mdq_url) {
     const id = _sha1_id(entityID);
     const url = mdq_url + id + ".json"
+    console.log('json_mdq_get_sp url: ', url)
 
     return json_mdq(url).then(function(data) {
+        console.log(`SP DATA: ${data}`);
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
+        console.log(`SP DATA 2: ${data}`);
         return data;
     }).catch(function(error) {
         console.log(error);
@@ -110,6 +114,7 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     }
 
     let remote = `${mdq_url}?${params.join('&')}`
+    console.log('json_mdq_search url: ', url)
     return json_mdq(remote);
 }
 
