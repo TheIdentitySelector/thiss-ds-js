@@ -195,6 +195,8 @@ export class DiscoveryService {
         } else {
             this.mdq = function(idp) { return json_mdq_get(_sha1_id(idp), trust_profile, entity_id, mdq) }
         }
+        this.mdq_sp = function(eID) { return json_mdq_get_sp(eID, mdq) }
+
         if (persistence instanceof PersistenceService) {
            this.ps = persistence;
         } else {
