@@ -219,8 +219,8 @@ export class DiscoveryService {
      *
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
-    saml_discovery_response(entity_id, trust_profile, persist=true) {
-        return this.do_saml_discovery_response(entity_id, trust_profile, persist).then(item => {
+    saml_discovery_response(entity_id, persist=true) {
+        return this.do_saml_discovery_response(entity_id, persist).then(item => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
             return ds_response_url(item.entity, params);
         }).then(url => {
@@ -250,7 +250,7 @@ export class DiscoveryService {
      * @param {entity_id} [string] the entityID of the SAML identity provider
      * @param (persist) [boolean] set to true (default) to persist the discovery metadata
      */
-    do_saml_discovery_response(entity_id, trust_profile, persist=true) {
+    do_saml_discovery_response(entity_id, persist=true) {
         let obj = this;
 
         return obj.ps.entity(obj.context, entity_id)
