@@ -113,9 +113,9 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
         params.push(`trustProfile=${trustProfile}`)
     }
 
-    let remote = `${mdq_url}?${params.join('&')}`
+    let url = `${mdq_url}?${params.join('&')}`
     console.log('json_mdq_search url: ', url)
-    return json_mdq(remote);
+    return json_mdq(url);
 }
 
 /**
