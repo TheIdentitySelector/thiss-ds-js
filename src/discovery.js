@@ -45,36 +45,41 @@ export function json_mdq(url) {
   *
   * @param {id} [string] an entityID (must be urlencoded) or sha1 id
   * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
-  * @returns {Promise} a Promise resolving an Object observing the discojson schema
+  * @param {entity_id} [string] entityID of the SP using the discovery service, in case there is a trust profile
+  * @param {trust_profile} [string] trustProfile selected by the SP using the discovery service, in case there is a trust profile
+  * @returns {object} an object representing the resulting entity
   */
 
 export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
-    let opts = {method: 'GET', headers: {}};
     let url = mdq_url + id + ".json"
-/*
-    if (entity_id) {
-        url = url + `/${encodeURIComponent(entity_id)}`
 
-        if (trust_profile) {
-            url = url + `/${trust_profile}`
-        }
-    }
-*/
-    if (entity_id) {
-        let params = []
-
-        if (entity_id) {
-            params.push(`entityID=${entity_id}`)
-        }
-
-        if (trust_profile) {
-            params.push(`trustProfile=${trust_profile}`)
-        }
-
-        url = `${url}?${params.join('&')}`
+    if (entity_id && trust_profile) {
+        url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trust_profile}`
     }
 
-    console.log('json_mdq_get: ', url)
+    return json_mdq(url).then(function(data) {
+        if (Object.prototype.toString.call(data) === "[object Array]") {
+            data = data[0];
+        }
+        return data;
+    }).catch(function(error) {
+        console.log(error);
+    });
+}
+
+/**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  *
+  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @returns {object} an object representing the resulting entity
+  */
+
+export function json_mdq_get_sp(entityID, mdq_url) {
+    const id = _sha1_id(entityID);
+    const url = mdq_url + id + ".json"
+
     return json_mdq(url).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
@@ -98,16 +103,13 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     let params = []
 
     params.push(`q=${text}`)
-    if (entityID) {
-        params.push(`entityID=${entityID}`)
-    }
 
-    if (trustProfile) {
+    if (entityID && trustProfile) {
+        params.push(`entityID=${encodeURIComponent(entityID)}`)
         params.push(`trustProfile=${trustProfile}`)
     }
 
     let remote = `${mdq_url}?${params.join('&')}`
-    console.log('json_mdq_search url: ', remote)
     return json_mdq(remote);
 }
 
