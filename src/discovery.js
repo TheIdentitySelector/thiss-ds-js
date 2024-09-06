@@ -68,8 +68,6 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     });
 }
 
-let sp_entity = null;
-
 /**
   * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
   * which must be resolved before the object can be accessed.
@@ -80,7 +78,6 @@ let sp_entity = null;
   */
 
 export function json_mdq_get_sp(entityID, mdq_url) {
-    if (sp_entity !== null) return Promise.resolve(sp_entity);
 
     const id = _sha1_id(entityID);
     const url = mdq_url + id + ".json"
@@ -91,7 +88,6 @@ export function json_mdq_get_sp(entityID, mdq_url) {
             data = data[0];
         }
         console.log(`SP DATA: ${JSON.stringify(data)}`);
-        sp_entity = data;
         return data;
     }).catch(function(error) {
         console.log(error);
