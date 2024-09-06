@@ -80,18 +80,17 @@ let sp_entity = null;
   */
 
 export function json_mdq_get_sp(entityID, mdq_url) {
-    if (sp_entity !== null) return sp_entity;
+    if (sp_entity !== null) return Promise.resolve(sp_entity);
 
     const id = _sha1_id(entityID);
     const url = mdq_url + id + ".json"
     console.log('json_mdq_get_sp url: ', url)
 
     return json_mdq(url).then(function(data) {
-        console.log(`SP DATA: ${JSON.stringify(data)}`);
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
-        console.log(`SP DATA 2: ${JSON.stringify(data)}`);
+        console.log(`SP DATA: ${JSON.stringify(data)}`);
         sp_entity = data;
         return data;
     }).catch(function(error) {
