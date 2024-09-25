@@ -72,7 +72,7 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
   * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
   * which must be resolved before the object can be accessed.
   *
-  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
+  * @param {entityID} [string] an entityID (must be urlencoded)
   * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
   * @returns {object} an object representing the resulting entity
   */
@@ -81,13 +81,11 @@ export function json_mdq_get_sp(entityID, mdq_url) {
 
     const id = _sha1_id(entityID);
     const url = mdq_url + id + ".json"
-    console.log('json_mdq_get_sp url: ', url)
 
     return json_mdq(url).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
         }
-        console.log(`SP DATA: ${JSON.stringify(data)}`);
         return data;
     }).catch(function(error) {
         console.log(error);
