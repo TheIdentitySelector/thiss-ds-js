@@ -50,7 +50,7 @@ export function json_mdq(url) {
   * @returns {object} an object representing the resulting entity
   */
 
-export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
+export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
     console.log('json_mdq_get url: ', url)
 
@@ -59,13 +59,18 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     }
 
     return json_mdq(url).then(function(data) {
-        if (Object.prototype.toString.call(data) === "[object Array]") {
+        if (Array.isArray(data) && data.length > 0) {
             data = data[0];
         }
         return data;
-    }).catch(function(error) {
-        console.log(error);
-    });
+    })
+}
+
+export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
+    return json_mdq_pre_get(id, trust_profile, entity_id, mdq_url)
+        .catch(function(error) {
+            console.log(error);
+        });
 }
 
 /**
