@@ -31,7 +31,7 @@ module.exports = {
           filename: 'index.html',
           inject: true,
           chunks: ['demo'],
-          template: '!ejs-loader!src/index.html'
+          template: 'src/index.html'
       }),
   ],
   output: {

@@ -26,7 +26,7 @@ author = u'Leif Johansson'
 # The short X.Y version
 version = u'1.0'
 # The full version, including alpha/beta/rc tags
-release = u'1.0.5'
+release = u'1.0.19'
 
 js_source_path = '../src'
 
