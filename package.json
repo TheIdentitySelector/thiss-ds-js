@@ -1,6 +1,6 @@
 {
   "name": "@theidentityselector/thiss-ds",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "A set of clients for the thiss.io service",
   "main": "dist/thiss-ds.js",
   "homepage": "https://thiss.io",
@@ -23,7 +23,7 @@
   "author": "Leif Johansson <leifj@sunet.se>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "post-robot": "^10.0.14"
+    "post-robot": "==10.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
