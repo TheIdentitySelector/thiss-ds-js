@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const DotEnv = require("dotenv-webpack");
 
 module.exports = {
@@ -16,13 +16,9 @@ module.exports = {
       'demo': ['./src/demo.js'],
   },
   node: {
-      console: false,
       global: true,
-      process: true,
       __filename: 'mock',
       __dirname: 'mock',
-      Buffer: false,
-      setImmediate: true
   },
   plugins: [
       new DotEnv({systemvars: true}),

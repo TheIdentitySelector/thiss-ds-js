@@ -1,5 +1,5 @@
-import {PersistenceService} from "./persist";
-const hex_sha1 = require('./sha1.js').default;
+import {PersistenceService} from "./persist.js";
+import hex_sha1 from './sha1.js';
 const cache_time = 60 * 10 * 1000; // 10 minutes
 
 function _timestamp() {
@@ -45,36 +45,48 @@ export function json_mdq(url) {
   *
   * @param {id} [string] an entityID (must be urlencoded) or sha1 id
   * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
-  * @returns {Promise} a Promise resolving an Object observing the discojson schema
+  * @param {entity_id} [string] entityID of the SP using the discovery service, in case there is a trust profile
+  * @param {trust_profile} [string] trustProfile selected by the SP using the discovery service, in case there is a trust profile
+  * @returns {object} an object representing the resulting entity
   */
 
-export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
-    let opts = {method: 'GET', headers: {}};
+export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
-/*
-    if (entity_id) {
-        url = url + `/${encodeURIComponent(entity_id)}`
+    console.log('json_mdq_get url: ', url)
 
-        if (trust_profile) {
-            url = url + `/${trust_profile}`
-        }
-    }
-*/
-    if (entity_id) {
-        let params = []
-
-        if (entity_id) {
-            params.push(`entityID=${entity_id}`)
-        }
-
-        if (trust_profile) {
-            params.push(`trustProfile=${trust_profile}`)
-        }
-
-        url = `${url}?${params.join('&')}`
+    if (entity_id && trust_profile) {
+        url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trust_profile}`
     }
 
-    console.log('json_mdq_get: ', url)
+    return json_mdq(url).then(function(data) {
+        if (Array.isArray(data) && data.length > 0) {
+            data = data[0];
+        }
+        return data;
+    })
+}
+
+export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
+    return json_mdq_pre_get(id, trust_profile, entity_id, mdq_url)
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+/**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  *
+  * @param {entityID} [string] an entityID (must be urlencoded)
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @returns {object} an object representing the resulting entity
+  */
+
+export function json_mdq_get_sp(entityID, mdq_url) {
+
+    const id = _sha1_id(entityID);
+    const url = mdq_url + id + ".json"
+
     return json_mdq(url).then(function(data) {
         if (Object.prototype.toString.call(data) === "[object Array]") {
             data = data[0];
@@ -98,17 +110,15 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     let params = []
 
     params.push(`q=${text}`)
-    if (entityID) {
-        params.push(`entityID=${entityID}`)
-    }
 
-    if (trustProfile) {
+    if (entityID && trustProfile) {
+        params.push(`entityID=${encodeURIComponent(entityID)}`)
         params.push(`trustProfile=${trustProfile}`)
     }
 
-    let remote = `${mdq_url}?${params.join('&')}`
-    console.log('json_mdq_search url: ', remote)
-    return json_mdq(remote);
+    let url = `${mdq_url}?${params.join('&')}`
+    console.log('json_mdq_search url: ', url)
+    return json_mdq(url);
 }
 
 /**
@@ -188,6 +198,8 @@ export class DiscoveryService {
         } else {
             this.mdq = function(idp) { return json_mdq_get(_sha1_id(idp), trust_profile, entity_id, mdq) }
         }
+        this.mdq_sp = function(eID) { return json_mdq_get_sp(eID, mdq) }
+
         if (persistence instanceof PersistenceService) {
            this.ps = persistence;
         } else {
@@ -217,8 +229,8 @@ export class DiscoveryService {
      *
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
-    saml_discovery_response(entity_id, trust_profile, persist=true) {
-        return this.do_saml_discovery_response(entity_id, trust_profile, persist).then(item => {
+    saml_discovery_response(entity_id, persist=true) {
+        return this.do_saml_discovery_response(entity_id, persist).then(item => {
             let params = parse_qs(window.location.search.substr(1).split('&'));
             return ds_response_url(item.entity, params);
         }).then(url => {
@@ -248,7 +260,7 @@ export class DiscoveryService {
      * @param {entity_id} [string] the entityID of the SAML identity provider
      * @param (persist) [boolean] set to true (default) to persist the discovery metadata
      */
-    do_saml_discovery_response(entity_id, trust_profile, persist=true) {
+    do_saml_discovery_response(entity_id, persist=true) {
         let obj = this;
 
         return obj.ps.entity(obj.context, entity_id)
