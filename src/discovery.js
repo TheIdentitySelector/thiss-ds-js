@@ -309,19 +309,17 @@ export class DiscoveryService {
             document.hasStorageAccess().then(hasAccess => {
                 if (!hasAccess) {
                     document.requestStorageAccess().then(storage => {
-                        console.log("Storage Access Granted");
                         callback();
                     }).catch(err => {
-                        console.log("Storage Access NOT Granted");
                         callback();
                     });
+                } else {
+                    callback();
                 }
             }).catch(err => {
-                console.log(`Error querying Storage Access: ${err}`);
                 callback();
             });
         } else {
-            console.log(`Storage Access API not available`);
             callback();
         }
     }
