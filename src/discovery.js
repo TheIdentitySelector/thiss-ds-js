@@ -295,4 +295,32 @@ export class DiscoveryService {
         return this.ps.remove(this.context, entity_id);
     }
 
+    /**
+     * Check for Storage Access permission and request it if absent and possible
+     *
+     * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
+     */
+    storageAccessHandler(callback) {
+        if (document.hasStorageAccess) {
+            // Check whether access has been granted using the Storage Access API.
+            // Note on page load this will always be false initially so we could be
+            // skipped in this example, but including for completeness for when this
+            // is not so obvious.
+            document.hasStorageAccess().then(hasAccess => {
+                if (!hasAccess) {
+                    document.requestStorageAccess().then(storage => {
+                        callback();
+                    }).catch(err => {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
+            }).catch(err => {
+                callback();
+            });
+        } else {
+            callback();
+        }
+    }
 }
