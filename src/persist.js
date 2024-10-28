@@ -37,17 +37,18 @@ export class PersistenceService {
         this._frame = this.create_iframe(url);
         this.dst = this._frame.contentWindow || this._frame;
         this.apikey = opts.apikey || undefined;
+        this.opts = opts
     }
 
     create_iframe(url) {
         let frame = window.document.createElement('iframe');
-        frame.style['display'] = 'none';
-        frame.style['position'] = 'absolute';
-        frame.style['top'] = '-999px';
-        frame.style['left'] = '-999px';
+        frame.style['height'] = '40px';
+        frame.style['width'] = '40px';
         frame.id = "ps_"+randID();
-        window.document.body.appendChild(frame);
-        frame.src = url;
+        const elem = window.document.body.querySelector(this.opts.selector);
+        elem.appendChild(frame);
+        const params = new URLSearchParams(this.props).toString();
+        frame.src = `${url}ps/?${params}`;
         return frame;
     }
 

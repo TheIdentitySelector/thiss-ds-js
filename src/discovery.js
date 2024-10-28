@@ -180,6 +180,62 @@ export function ds_response_url(entity, params) {
 }
 
 /**
+ * Check for Storage Access permission and request it if absent and possible
+ *
+ * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
+ */
+storageAccessHandler(callback) {
+    if (document.hasStorageAccess) {
+        // Check whether access has been granted using the Storage Access API.
+        // Note on page load this will always be false initially so we could be
+        // skipped in this example, but including for completeness for when this
+        // is not so obvious.
+        document.hasStorageAccess().then(hasAccess => {
+            if (!hasAccess) {
+                document.requestStorageAccess().then(storage => {
+                    callback();
+                }).catch(err => {
+                    callback();
+                });
+            } else {
+                let permission;
+                try {
+                    permission = await navigator.permissions.query(
+                        {name: 'storage-access'}
+                    );
+                } catch (error) {
+                    // storage-access permission not supported. Assume no cookie access.
+                    return false;
+                }
+
+                if (permission) {
+                    if (permission.state === 'granted') {
+                    // Permission has previously been granted so can just call
+                    // requestStorageAccess() without a user interaction and
+                    // it will resolve automatically.
+                    return true;
+                } else if (permission.state === 'prompt') {
+                // Need to call requestStorageAccess() after a user interaction
+                // (potentially with a prompt). Can't do anything further here,
+                // so handle this in the click handler.
+                    return false;
+                } else if (permission.state === 'denied') {
+                    // Currently not used. See:
+                    // https://github.com/privacycg/storage-access/issues/149
+                    return false;
+                }
+            }
+                callback();
+            }
+        }).catch(err => {
+            callback();
+        });
+    } else {
+        callback();
+    }
+}
+
+/**
  * A DiscoveryService class representing the business logic of a SAML disocvery service.
  *
  */
@@ -293,34 +349,5 @@ export class DiscoveryService {
      */
     remove(entity_id) {
         return this.ps.remove(this.context, entity_id);
-    }
-
-    /**
-     * Check for Storage Access permission and request it if absent and possible
-     *
-     * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
-     */
-    storageAccessHandler(callback) {
-        if (document.hasStorageAccess) {
-            // Check whether access has been granted using the Storage Access API.
-            // Note on page load this will always be false initially so we could be
-            // skipped in this example, but including for completeness for when this
-            // is not so obvious.
-            document.hasStorageAccess().then(hasAccess => {
-                if (!hasAccess) {
-                    document.requestStorageAccess().then(storage => {
-                        callback();
-                    }).catch(err => {
-                        callback();
-                    });
-                } else {
-                    callback();
-                }
-            }).catch(err => {
-                callback();
-            });
-        } else {
-            callback();
-        }
     }
 }
