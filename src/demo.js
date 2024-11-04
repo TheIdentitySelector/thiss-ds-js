@@ -1,5 +1,4 @@
 import {DiscoveryService} from "./discovery"
-import {PersistenceService} from "./persist"
 
 function entity_to_dl(entity,dl) {
    let doc = window.document;

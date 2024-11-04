@@ -180,62 +180,6 @@ export function ds_response_url(entity, params) {
 }
 
 /**
- * Check for Storage Access permission and request it if absent and possible
- *
- * @param {entity_id} [string] the entityID of the SAML identity provider to be removed
- */
-storageAccessHandler(callback) {
-    if (document.hasStorageAccess) {
-        // Check whether access has been granted using the Storage Access API.
-        // Note on page load this will always be false initially so we could be
-        // skipped in this example, but including for completeness for when this
-        // is not so obvious.
-        document.hasStorageAccess().then(hasAccess => {
-            if (!hasAccess) {
-                document.requestStorageAccess().then(storage => {
-                    callback();
-                }).catch(err => {
-                    callback();
-                });
-            } else {
-                let permission;
-                try {
-                    permission = await navigator.permissions.query(
-                        {name: 'storage-access'}
-                    );
-                } catch (error) {
-                    // storage-access permission not supported. Assume no cookie access.
-                    return false;
-                }
-
-                if (permission) {
-                    if (permission.state === 'granted') {
-                    // Permission has previously been granted so can just call
-                    // requestStorageAccess() without a user interaction and
-                    // it will resolve automatically.
-                    return true;
-                } else if (permission.state === 'prompt') {
-                // Need to call requestStorageAccess() after a user interaction
-                // (potentially with a prompt). Can't do anything further here,
-                // so handle this in the click handler.
-                    return false;
-                } else if (permission.state === 'denied') {
-                    // Currently not used. See:
-                    // https://github.com/privacycg/storage-access/issues/149
-                    return false;
-                }
-            }
-                callback();
-            }
-        }).catch(err => {
-            callback();
-        });
-    } else {
-        callback();
-    }
-}
-
-/**
  * A DiscoveryService class representing the business logic of a SAML disocvery service.
  *
  */
@@ -247,19 +191,36 @@ export class DiscoveryService {
      * @param {mdq} [function (entity_id) {}|string] a callable or a URL to be used for MDQ-style lookups of entity objects.
      * @param {persistence} [string|PersistenceService] the URL of a persistence service or an instance of the PersistanceService
      * @param {context} [string] the default context identifier
+     *  @param {opts} [Object] An object containing options. Supported keys:
+     *      @param {opts.selector} [str] A selector in which to place the PS checkbox
+     *      @param {opts.trustProfile} [str] The name of a trust profile with filtering information
+     *      @param {opts.entityID} [str] The entityID of the SP publishing the trust profile
      */
-    constructor(mdq, persistence, context = "thiss.io", entity_id, trust_profile) {
+    constructor(mdq, persistence, context, opts = {}) {
+        let selector, entityID, trustProfile;
+        if (typeof context === 'string') {
+            selector = opts.selector;
+            entityID = opts.entityID;
+            trustProfile = opts.trustProfile;
+        } else if (typeof context === 'object') {
+            selector = context.selector;
+            entityID = context.entityID;
+            trustProfile = context.trustProfile;
+            context = "thiss.io";
+        } else {
+            context = "thiss.io";
+        }
         if (typeof mdq === 'function') {
             this.mdq = mdq;
         } else {
-            this.mdq = function(idp) { return json_mdq_get(_sha1_id(idp), trust_profile, entity_id, mdq) }
+            this.mdq = function(idp) { return json_mdq_get(_sha1_id(idp), trustProfile, entityID, mdq) }
         }
         this.mdq_sp = function(eID) { return json_mdq_get_sp(eID, mdq) }
 
         if (persistence instanceof PersistenceService) {
            this.ps = persistence;
         } else {
-           this.ps = new PersistenceService(persistence);
+           this.ps = new PersistenceService(persistence, {selector: selector});
         }
         this.context = context;
     }

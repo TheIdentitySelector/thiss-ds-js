@@ -10,6 +10,10 @@ function randID() {
      return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, 100));
+}
+
 /**
  *
  * A client for the thiss.io persistence service. The Persistence service methods all follow
@@ -28,27 +32,37 @@ export class PersistenceService {
      *
      *  @param {url} The URL of the persistence service - eg https://use.thiss.io/ps/
      *  @param {opts} [Object] An object containing options. Supported keys:
+     *      @param {opts.selector} [str] A selector in which to place the PS checkbox
      *      @param {opts.apikey} [str] An optional API-key
      *
      */
-    constructor(url, opts) {
+    constructor(url, opts = {}) {
         this._url = url;
-        opts |= {};
-        this._frame = this.create_iframe(url);
+        const selector = opts.selector;
+        this._frame = this.create_iframe(url, selector);
         this.dst = this._frame.contentWindow || this._frame;
         this.apikey = opts.apikey || undefined;
+        delete opts.apikey;
         this.opts = opts
     }
 
-    create_iframe(url) {
+    create_iframe(url, selector) {
         let frame = window.document.createElement('iframe');
-        frame.style['height'] = '40px';
-        frame.style['width'] = '40px';
         frame.id = "ps_"+randID();
-        const elem = window.document.body.querySelector(this.opts.selector);
-        elem.appendChild(frame);
-        const params = new URLSearchParams(this.props).toString();
-        frame.src = `${url}ps/?${params}`;
+        if (selector !== undefined) {
+            frame.style['height'] = '40px';
+            frame.style['width'] = '40px';
+            const elem = window.document.body.querySelector(selector);
+            elem.appendChild(frame);
+        } else {
+            frame.style['display'] = 'none';
+            frame.style['position'] = 'absolute';
+            frame.style['top'] = '-999px';
+            frame.style['left'] = '-999px';
+            window.document.body.appendChild(frame);
+        }
+        const params = new URLSearchParams(this.opts).toString();
+        frame.src = `${url}?${params}`;
         return frame;
     }
 
@@ -72,7 +86,22 @@ export class PersistenceService {
      *  @returns {Promise} A Promise that resolves to a list of items on success.
      */
     entities(context) {
-        return postRobot.send(this.dst, 'entities', {"context": context, "apikey": this.apikey});
+        const self = this;
+        return postRobot.send(self.dst, 'entities', {"context": context, "apikey": self.apikey})
+            .then(result => result)
+            .catch(e => {
+                return new Promise((resolve, reject) => {
+                    const timeout = 5000;
+                    window.setTimeout(() => {
+                        reject(`Timeot ${timeout}`);
+                    }, timeout);
+                    postRobot.on('init', {window: self.dst}, function(event) {
+                        resolve(
+                            postRobot.send(self.dst, 'entities', {"context": context, "apikey": self.apikey})
+                        );
+                    });
+                });
+            });
     }
 
     /**
