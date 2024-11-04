@@ -10,3 +10,8 @@ Version 2.1.1
 -------------
 
 * Support for Storage Access API
+
+Version 2.1.2
+-------------
+
+* Bugfixes and cleanup
