@@ -15,3 +15,8 @@ Version 2.1.2
 -------------
 
 * Bugfixes and cleanup
+
+Version 2.1.3
+-------------
+
+* Missing build directory
