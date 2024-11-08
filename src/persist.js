@@ -52,6 +52,8 @@ export class PersistenceService {
         if (selector !== undefined) {
             frame.style['height'] = '40px';
             frame.style['width'] = '40px';
+            frame.style['border'] = '0px';
+            frame.style['background-color'] = 'transparent';
             const elem = window.document.body.querySelector(selector);
             elem.appendChild(frame);
         } else {

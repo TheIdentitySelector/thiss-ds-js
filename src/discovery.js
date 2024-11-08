@@ -52,7 +52,6 @@ export function json_mdq(url) {
 
 export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
-    console.log('json_mdq_get url: ', url)
 
     if (entity_id && trust_profile) {
         url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trust_profile}`
