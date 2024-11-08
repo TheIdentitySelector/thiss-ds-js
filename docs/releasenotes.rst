@@ -20,3 +20,8 @@ Version 2.1.3
 -------------
 
 * Missing build directory
+
+Version 2.1.4
+-------------
+
+* Bugfixes
