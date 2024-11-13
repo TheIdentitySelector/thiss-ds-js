@@ -4,11 +4,11 @@ Using thiss-ds
 Overview
 --------
 
-There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersistenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage (using the `js-storage package <https://www.npmjs.com/package/js-storage>`_). The namespace is called the "context" below (more about how contexts work later).
+There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersistenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage (or cookies when local storage is not available). The namespace is called the "context" below (more about how contexts work later).
 
 The DiscoveryService class is essentially a reference to an instance of the PersistenceService and a metadata query service (MDQ for short) which relies on fetch to retrieve JSON-objects that represent known identity providers. This class also contains some utility methods providing a way to implement SAML Identity Provider Discovery v1.0.
 
-Create an instance of the DiscoveryService object thus (where `my_context` is a string or unknown which makes the instance default to the default (or global) context:
+Create an instance of the DiscoveryService object thus (where `my_context` is a string or unknown which makes the instance default to the default (or global) context):
 
 .. code-block:: js
 
@@ -16,11 +16,21 @@ Create an instance of the DiscoveryService object thus (where `my_context` is a 
            // return json representation of entity_id
         }, 
         'https://use.thiss.io/ps', 
-        my_context):
+        my_context,
+        {
+          selector: "#some-elem-id",
+        }):
 
   var ds = new DiscoveryService('https://md.thiss.io/entities/', 
        'https://use.thiss.io/ps', 
-       my_context):
+       my_context,
+        {
+          selector: "#some-elem-id",
+          trustProfile: "name-of-profile",
+          entityID: "https://sp-publishing-trust-profile.net/shibboleth"
+        }):
+
+The options `selector`, `trustProfile`, and `entityID` are optional. The `selector` option is used to provide an anchor in the UI to which the service can attach a checkbox that will allow it to access global persistence. The `trustProfile`, and `entityID` are used to indicate a trust profile (which the MDQ must know about) that will limit the IdPs returned by the MDQ to some subset of all the IdPs known to it. There are different criteria that trust profiles can use to limit the IdPs served, such as by registration authority, or metadata source.
 
 Calling the metadata lookup service with the entityID of an IdP returns a Promise that resolves (if the lookup was successful) to a JSON object (or undefined) that represents the IdP. The "schema" of the JSON is based in large parts on the classical discojson format and is explained below.
 

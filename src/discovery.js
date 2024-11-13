@@ -19,7 +19,7 @@ function _sha1_id(s) {
   * which must be resolved before the object can be accessed.
   *
   * @param {url} [string] an URL
-  * @returns {Promise} a Promise resolving an list of json objects
+  * @returns {Promise} a Promise resolving a list of json objects
   */
 
 export function json_mdq(url) {
@@ -39,17 +39,6 @@ export function json_mdq(url) {
     })
 }
 
-/**
-  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
-  * which must be resolved before the object can be accessed.
-  *
-  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
-  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
-  * @param {entity_id} [string] entityID of the SP using the discovery service, in case there is a trust profile
-  * @param {trust_profile} [string] trustProfile selected by the SP using the discovery service, in case there is a trust profile
-  * @returns {object} an object representing the resulting entity
-  */
-
 export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
 
@@ -65,6 +54,17 @@ export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
     })
 }
 
+/**
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * which must be resolved before the object can be accessed.
+  *
+  * @param {id} [string] an entityID (must be urlencoded) or sha1 id
+  * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @param {entity_id} [string] entityID of the SP using the discovery service, in case there is a trust profile
+  * @param {trust_profile} [string] trustProfile selected by the SP using the discovery service, in case there is a trust profile
+  * @returns {object} an object representing the resulting entity
+  */
+
 export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
     return json_mdq_pre_get(id, trust_profile, entity_id, mdq_url)
         .catch(function(error) {
@@ -73,7 +73,8 @@ export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
 }
 
 /**
-  * An MDQ client using fetch (https://fetch.spec.whatwg.org/). The function returns a Promise
+  * An MDQ client using fetch (https://fetch.spec.whatwg.org/)
+  * that will look for an SP entity based on its entityID. The function returns a Promise
   * which must be resolved before the object can be accessed.
   *
   * @param {entityID} [string] an entityID (must be urlencoded)
@@ -102,6 +103,8 @@ export function json_mdq_get_sp(entityID, mdq_url) {
   *
   * @param {text} [string] the string to search for
   * @param {mdq_url} [string] a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
+  * @param {entity_id} [string] entityID of the SP using the discovery service, in case there is a trust profile. This is optional.
+  * @param {trust_profile} [string] trustProfile selected by the SP using the discovery service. This is optional.
   * @returns {Promise} a Promise resolving an list of Object observing the discojson schema
   */
 

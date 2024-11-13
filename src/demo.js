@@ -26,7 +26,14 @@ function entity_to_dl(entity,dl) {
 }
 
 window.onload = function() {
-   let ds = new DiscoveryService("https://md.thiss.io/entities/","https://use.thiss.io/ps/","test")
+   let ds = new DiscoveryService(
+     "https://md.thiss.io/entities/",
+     "https://use.thiss.io/ps/",
+     "test",
+     {
+       selector: "#checkbox-anchor"
+     }
+   )
    let doc = window.document;
    let o = doc.getElementById("info");
    let i = doc.getElementById("lookup");
