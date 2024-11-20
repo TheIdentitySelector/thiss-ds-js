@@ -93,7 +93,7 @@ export function json_mdq_get_sp(entityID, mdq_url) {
         }
         return data;
     }).catch(function(error) {
-        console.log(error);
+        console.log("ERROR getting SP md:", error);
     });
 }
 
@@ -119,7 +119,6 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
     }
 
     let url = `${mdq_url}?${params.join('&')}`
-    console.log('json_mdq_search url: ', url)
     return json_mdq(url);
 }
 

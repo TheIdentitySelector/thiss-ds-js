@@ -93,11 +93,12 @@ export class PersistenceService {
             .then(result => result)
             .catch(e => {
                 return new Promise((resolve, reject) => {
-                    const timeout = 5000;
-                    window.setTimeout(() => {
-                        reject(`Timeot ${timeout}`);
+                    const timeout = 10000;
+                    const timeoutID = window.setTimeout(() => {
+                        reject(`Timeout ${timeout}`);
                     }, timeout);
                     postRobot.on('init', {window: self.dst}, function(event) {
+                        window.clearTimeout(timeoutID);
                         resolve(
                             postRobot.send(self.dst, 'entities', {"context": context, "apikey": self.apikey})
                         );
