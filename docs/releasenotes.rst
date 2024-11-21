@@ -25,3 +25,8 @@ Version 2.1.4
 -------------
 
 * Bugfixes
+
+Version 2.1.6
+-------------
+
+* Bugfixes and cleanup
