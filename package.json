@@ -1,6 +1,6 @@
 {
   "name": "@theidentityselector/thiss-ds",
-  "version": "2.1.6",
+  "version": "2.1.14",
   "description": "A set of clients for the thiss.io service",
   "main": "dist/thiss-ds.js",
   "homepage": "https://thiss.io",

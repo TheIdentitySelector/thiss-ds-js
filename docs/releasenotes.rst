@@ -30,3 +30,8 @@ Version 2.1.6
 -------------
 
 * Bugfixes and cleanup
+
+Version 2.1.14
+--------------
+
+* Special behaviour for shibboleth session initiator
