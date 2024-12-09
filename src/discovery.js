@@ -123,33 +123,16 @@ export function json_mdq_search(text, mdq_url, entityID, trustProfile) {
 }
 
 /**
- * Parse an array of querystring components into an Object
- *
- * @params {paramsArray} [Array] an array of k=v parameters resulting from a split on '&' the Query string of a URI
- * @returns an object with each k,v-pair as properties.
- */
-export function parse_qs(paramsArray) {
-    let params = {};
-
-    paramsArray.forEach( p => {
-        let av = p.split('=', 2);
-        if (av.length == 2)
-            params[av[0]] = decodeURIComponent(av[1].replace(/\+/g, " "))
-    });
-
-    return params;
-}
-
-/**
  * Create a SAML discovery service protocol response URL from the entity_id property of the
  * entity object and the return and returnIDParam (if present) of the params object.
  * Combine with a base URL to form a full discovery service response.
  *
  * @param {entity} [Object] a discojson entity
- * @param {params} [Object] an object from which 'returnIDParams' and 'return' will be used
+ * @param {params} [Object] an URLSearchParams object from which 'returnIDParams' and 'return' will be used
+ * @param {initiator_type} [Object] either 'shib' or 'ds'
  * @returns {string} a query string
  */
-export function ds_response_url(entity, params) {
+export function ds_response_url(entity, params, initiator_type) {
     /* The `return` query-param holds the URL where the response is returned.
      * It is set by the caller and should correspond to one of the SAML
      * DiscoveryResponse elements.
@@ -160,17 +143,21 @@ export function ds_response_url(entity, params) {
      *
      * If the `return` query-param is not a valid URL we throw an error.
      */
-    let response = params['return'];
-    if (!response.startsWith('http://') && !response.startsWith('https://')) {
+    let response = params.get('return');
+    if (response === null || (!response.startsWith('http://') && !response.startsWith('https://'))) {
         throw new Error(`Invalid return query param: ${response}`)
     }
 
     let qs = response.indexOf('?') === -1 ? '?' : '&';
-    let returnIDParam = params['returnIDParam'];
+    let returnIDParam = params.get('returnIDParam');
 
     let entity_id = entity.entity_id;
     if (!returnIDParam) {
-        returnIDParam = "entityID";
+        if (initiator_type === 'ds') {
+            returnIDParam = "entityID";
+        } else if (initiator_type === 'shib') {
+            returnIDParam = "IDPEntityID";
+        }
     }
 
     if (entity_id) {
@@ -247,10 +234,11 @@ export class DiscoveryService {
      *
      * @param {entity_id} [string] an entityID of the chosen SAML identity provider.
      */
-    saml_discovery_response(entity_id, persist=true) {
+    saml_discovery_response(entity_id, persist, initiator_type) {
         return this.do_saml_discovery_response(entity_id, persist).then(item => {
-            let params = parse_qs(window.location.search.substr(1).split('&'));
-            return ds_response_url(item.entity, params);
+            let params = new URLSearchParams(window.location.search);
+            const url = ds_response_url(item.entity, params, initiator_type);
+            return url;
         }).then(url => {
             window.top.location.href = url;
         }).catch(function(error) {
