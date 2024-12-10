@@ -30,7 +30,7 @@ Create an instance of the DiscoveryService object thus (where `my_context` is a 
           entityID: "https://sp-publishing-trust-profile.net/shibboleth"
         }):
 
-The options `selector`, `trustProfile`, and `entityID` are optional. The `selector` option is used to provide an anchor in the UI to which the service can attach a checkbox that will allow it to access global persistence. The `trustProfile`, and `entityID` are used to indicate a trust profile (which the MDQ must know about) that will limit the IdPs returned by the MDQ to some subset of all the IdPs known to it. There are different criteria that trust profiles can use to limit the IdPs served, such as by registration authority, or metadata source.
+The options `selector`, `trustProfile`, and `entityID` are optional. The `selector` option is used to provide an anchor in the UI to which the service can attach a checkbox that will allow it to prompt the user for permission to access global persistence. The `trustProfile`, and `entityID` are used to indicate a trust profile (which the MDQ must know about) that will limit the IdPs returned by the MDQ to some subset of all the IdPs known to it. There are different criteria that trust profiles can use to limit the IdPs served, such as by registration authority, or metadata source.
 
 Calling the metadata lookup service with the entityID of an IdP returns a Promise that resolves (if the lookup was successful) to a JSON object (or undefined) that represents the IdP. The "schema" of the JSON is based in large parts on the classical discojson format and is explained below.
 

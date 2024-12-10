@@ -20,8 +20,8 @@ function sleep(ms) {
  * the same pattern - a call that returns a Promise that resolves to one or more item Objects.
  * An item is an Object with two properties:
  *
- *  @param {entity}: An entity object (discojson schema)
- *  @param {last_refresh}: A timestamp when this entity was last updated (used)
+ *  @prop {Object} entity An entity object (discojson schema)
+ *  @prop {int} last_refresh A timestamp when this entity was last updated (used)
  */
 export class PersistenceService {
 
@@ -29,11 +29,18 @@ export class PersistenceService {
      *
      * The constructor initializes an iframe in window.document setting src to the
      * URL provided to the constructor.
+     * To obtain cross-site persistence, using the browser's Storage Access API,
+     * an integrator must expose a checkbox from the persistence service, so that when
+     * the user clicks on it, they will be prompted for permission to share persisted
+     * entities across different sites using the persistence service. This exposed
+     * checkbox can be labelled "remember me" or something of the sort.
+     * 
+     * @constructor
      *
-     *  @param {url} The URL of the persistence service - eg https://use.thiss.io/ps/
-     *  @param {opts} [Object] An object containing options. Supported keys:
-     *      @param {opts.selector} [str] A selector in which to place the PS checkbox
-     *      @param {opts.apikey} [str] An optional API-key
+     *  @param {string} url The URL of the persistence service - eg https://use.thiss.io/ps/
+     *  @param {Object} opts An object containing options. Supported keys:
+     *      @prop {opts.selector} [str] A selector in which to place the PS checkbox
+     *      @prop {opts.apikey} [str] An optional API-key
      *
      */
     constructor(url, opts = {}) {
@@ -71,8 +78,8 @@ export class PersistenceService {
     /**
      * Update an an entity object in browser local store tied to the ORIGIN of the service URL.
      *
-     *  @param {context} [str] The context to write to
-     *  @param {entity} [Object] A js object representing an entity. Uses the discojson schema.
+     *  @param {string} context The context to write to
+     *  @param {Object} entity A js object representing an entity. Uses the discojson schema.
      *  @returns {Promise} A Promise that resolves to an item containing the provided entity on success.
      */
     update(context, entity) {
@@ -84,7 +91,7 @@ export class PersistenceService {
      * examine the last_time property to make sure the provided entities are "recent" enough
      * to be used.
      *
-     *  @param {context} [str] The context to write to
+     *  @param {string} context The context to write to
      *  @returns {Promise} A Promise that resolves to a list of items on success.
      */
     entities(context) {
@@ -110,7 +117,8 @@ export class PersistenceService {
     /**
      * Remove an entity from the context.
      *
-     *  @param {entity_id} [string] The entityID of the item to be removed.
+     *  @param {string} context The context to write to
+     *  @param {string} entity_id The entityID of the item to be removed.
      *  @returns {Promise} A Promise that resolves to nothing on success.
      *
      */
@@ -121,12 +129,12 @@ export class PersistenceService {
     /**
      * Fetch an entity from the context.
      *
-     *  @param {entity_id} [string] The entityID of the item to be removed.
+     *  @param {string} context The context to write to
+     *  @param {string} entity_id The entityID of the item to be removed.
      *  @returns {Promise} A Promise that resolves to an item containing the entity on success.
      *
      */
     entity(context, entity_id) {
         return postRobot.send(this.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": this.apikey});
     }
-
 }
