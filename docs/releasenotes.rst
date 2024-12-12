@@ -40,3 +40,9 @@ Version 2.1.16
 --------------
 
 * Docs and API
+
+Version 2.1.17
+--------------
+
+* Revert special behaviour for shibboleth session initiator
+* Docs
