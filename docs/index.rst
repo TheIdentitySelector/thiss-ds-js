@@ -16,6 +16,7 @@ This is the client API package for services built on the thiss.io software - eg 
    install
    usage
    example
+   using-saa
    releasenotes
    api/persist
    api/discovery
