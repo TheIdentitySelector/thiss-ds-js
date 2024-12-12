@@ -38,11 +38,11 @@ export function json_mdq(url) {
     })
 }
 
-export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
+export function json_mdq_pre_get(id, trustProfile, entity_id, mdq_url) {
     let url = mdq_url + id + ".json"
 
-    if (entity_id && trust_profile) {
-        url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trust_profile}`
+    if (entity_id && trustProfile) {
+        url = `${url}?entityID=${encodeURIComponent(entity_id)}&trustProfile=${trustProfile}`
     }
 
     return json_mdq(url).then(function(data) {
@@ -60,11 +60,11 @@ export function json_mdq_pre_get(id, trust_profile, entity_id, mdq_url) {
   * @param {string} id an entityID (must be urlencoded) or sha1 id
   * @param {string} mdq_url a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
   * @param {string} entity_id entityID of the SP using the discovery service, in case there is a trust profile
-  * @param {string} trust_profile trustProfile selected by the SP using the discovery service, in case there is a trust profile
+  * @param {string} trustProfile trustProfile selected by the SP using the discovery service, in case there is a trust profile
   * @returns {Promise} A promise that resolves to an object representing the resulting entity
   */
-export function json_mdq_get(id, trust_profile, entity_id, mdq_url) {
-    return json_mdq_pre_get(id, trust_profile, entity_id, mdq_url)
+export function json_mdq_get(id, trustProfile, entity_id, mdq_url) {
+    return json_mdq_pre_get(id, trustProfile, entity_id, mdq_url)
         .catch(function(error) {
             console.log(error);
         });
@@ -102,7 +102,7 @@ export function json_mdq_get_sp(entityID, mdq_url) {
   * @param {string} text the string to search for
   * @param {string} mdq_url a URL of an MDQ service incl trailing slash - eg https://md.thiss.io/entities/
   * @param {string} entity_id entityID of the SP using the discovery service, in case there is a trust profile. This is optional.
-  * @param {string} trust_profile trustProfile selected by the SP using the discovery service. This is optional.
+  * @param {string} trustProfile trustProfile selected by the SP using the discovery service. This is optional.
   * @returns {Promise} a Promise resolving an list of Object observing the discojson schema
   */
 
@@ -148,10 +148,9 @@ export function parse_qs(paramsArray) {
  *
  * @param {Object} entity a discojson entity
  * @param {Object} params an object object from which 'return' (required) and 'returnIDParams' (optional) will be used
- * @param {Object} initiator_type either 'shib' or 'ds' (optional)
  * @returns {string} a query string
  */
-export function ds_response_url(entity, params, initiator_type='ds') {
+export function ds_response_url(entity, params) {
     /* The `return` query-param holds the URL where the response is returned.
      * It is set by the caller and should correspond to one of the SAML
      * DiscoveryResponse elements.
@@ -163,7 +162,7 @@ export function ds_response_url(entity, params, initiator_type='ds') {
      * If the `return` query-param is not a valid URL we throw an error.
      */
     let response = params.return;
-    if (response === null || (!response.startsWith('http://') && !response.startsWith('https://'))) {
+    if (response === undefined || (!response.startsWith('http://') && !response.startsWith('https://'))) {
         throw new Error(`Invalid return query param: ${response}`)
     }
 
@@ -172,11 +171,7 @@ export function ds_response_url(entity, params, initiator_type='ds') {
 
     let entity_id = entity.entity_id;
     if (!returnIDParam) {
-        if (initiator_type === 'ds') {
-            returnIDParam = "entityID";
-        } else if (initiator_type === 'shib') {
-            returnIDParam = "IDPEntityID";
-        }
+        returnIDParam = "entityID";
     }
 
     if (entity_id) {
@@ -261,12 +256,11 @@ export class DiscoveryService {
      *
      * @param {string} entity_id an entityID of the chosen SAML identity provider.
      * @param {boolean} persist whether to persist the choice
-     * @param {Object} initiator_type either 'shib' or 'ds' (optional)
      */
-    saml_discovery_response(entity_id, persist, initiator_type='ds') {
+    saml_discovery_response(entity_id, persist=true) {
         return this.do_saml_discovery_response(entity_id, persist).then(item => {
             let params = Object.fromEntries(new URLSearchParams(window.location.search));
-            const url = ds_response_url(item.entity, params, initiator_type);
+            const url = ds_response_url(item.entity, params);
             return url;
         }).then(url => {
             window.top.location.href = url;
