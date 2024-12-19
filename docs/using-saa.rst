@@ -10,7 +10,7 @@ to prompt the end user for permission to access first party storage. This API ca
 and can only be called in reaction to an end user interaction with some UI element in the third party context.
 In addition, to be able to use the API, the user must have previously visited the third party origin in a first party context.
 
-Previously, the PS run in an iframe that was fully invisible, with no elemets exposed in the UI.
+Previously, the PS ran in an iframe that was fully invisible, with no elemets exposed in the UI.
 This is no longer possible, if we want to leverage the Storage Access API; the PS will need to expose some element in the UI.
 For the moment, this element is a checkbox. The integrator using the PS client in their code will need to decide where to expose it.
 So the call to the constructor for the client for the PS can take a new parameter, a DOM locator, pointing to some element
@@ -25,6 +25,12 @@ The behaviour of the checkbox only affects the way user choices are persisted.
 - If the user grants the permission, any choices stored in local, partitioned storage will be moved to global, unpartitioned storage, and subsequently there will be global persistence. The checkbox will then on subsequent visits load checked.
 - If the user denies the permission, there will only be local persistence for a period of time (30 days) until the API allows prompting the user for storage access permission again.
 - In any case, there will be persistence (global or local) when the checkbox is checked.
+
+Accessing the SeamlessAccess persistent storage through Storage Access API
+==========================================================================
+
+As mentioned above, first create an element in the form of a checkbox, then associate the checkbox with the call for the persistence service.
+The use of a checkbox is our current suggestion, and we will communicate if our suggestion changes.
 
 This is an example of accessing the PS:
 
