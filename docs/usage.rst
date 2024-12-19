@@ -15,14 +15,14 @@ Create an instance of the DiscoveryService object thus (where `my_context` is a 
   var ds = new DiscoveryService(function(entity_id) { 
            // return json representation of entity_id
         }, 
-        'https://use.thiss.io/ps', 
+        'https://use.thiss.io/ps/', 
         my_context,
         {
           selector: "#some-elem-id",
         }):
 
   var ds = new DiscoveryService('https://md.thiss.io/entities/', 
-       'https://use.thiss.io/ps', 
+       'https://use.thiss.io/ps/', 
        my_context,
         {
           selector: "#some-elem-id",

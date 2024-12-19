@@ -29,10 +29,15 @@ The behaviour of the checkbox only affects the way user choices are persisted.
 Accessing the SeamlessAccess persistent storage through Storage Access API
 ==========================================================================
 
-As mentioned above, first create an element in the form of a checkbox, then associate the checkbox with the call for the persistence service.
-The use of a checkbox is our current suggestion, and we will communicate if our suggestion changes.
+As mentioned above, first we create an element which will hold the PS checkbox, and then provide the PS constructor with a selector for the element.
 
-This is an example of accessing the PS:
+This is an example of accessing the PS. The client page will have some HTML similar to:
+
+.. code-block:: html
+
+    <p><span id="ps-checkbox-holder"><span/> Remember my choice</p>
+
+Then we call the constructor:
 
 .. code-block:: js
 
@@ -41,8 +46,24 @@ This is an example of accessing the PS:
     const ps = PersistenceService(
         'https://use.thiss.io/ps/',
         {
-            selector: '#some-element-id',
+            selector: '#ps-checkbox-holder',
         });
 
     // do something with `ps`
 
+Now we can do things with the `ps` object, see the PS API :ref:`api/persist`
+
+The changes to code using the :class:`DiscoveryService` class are similar, since it includes a :class:`PersistenceService` property.
+Firt we would add some HTML element to hold te checkbox, and the provide the constructor with a selector for the element:
+
+.. code-block:: js
+
+  var ds = new DiscoveryService(
+       'https://md.thiss.io/entities/', 
+       'https://use.thiss.io/ps/', 
+       'my_context',
+        {
+          selector: "#ps-checkbox-holder",
+        }):
+
+And now we can do things with the `ds` object, see the DS API :ref:`api/discovery`
