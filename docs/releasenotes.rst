@@ -46,3 +46,9 @@ Version 2.1.17
 
 * Revert special behaviour for shibboleth session initiator
 * Docs
+
+Version 2.1.28
+--------------
+
+* Documentation
+* Readthedocs configuration
