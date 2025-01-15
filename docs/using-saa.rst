@@ -10,6 +10,10 @@ to prompt the end user for permission to access first party storage. This API ca
 and can only be called in reaction to an end user interaction with some UI element in the third party context.
 In addition, to be able to use the API, the user must have previously visited the third party origin in a first party context.
 
+Note that at this point, to test the Storage Access API in chrome and chromium derivatives, the end user has to enable the flag
+"third party cookie phaseout". To do this, enter `chrome://flags` in the address bar, and then look for "third party cookie phaseout",
+enable it, and restart the browser.
+
 Previously, the PS ran in an iframe that was fully invisible, with no elemets exposed in the UI.
 This is no longer possible, if we want to leverage the Storage Access API; the PS will need to expose some element in the UI.
 For the moment, this element is a checkbox. The integrator using the PS client in their code will need to decide where to expose it.
