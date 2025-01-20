@@ -45,34 +45,61 @@ export class PersistenceService {
      */
     constructor(url, opts = {}) {
         this._url = url;
-        const selector = opts.selector;
-        this._frame = this.create_iframe(url, selector);
+        this._selector = opts.selector;
+        this._frame = window.document.createElement('iframe');
+        this._frame.id = "ps_"+randID();
+        this._frame.src = url;
+        this.init_iframe(this._selector);
         this.dst = this._frame.contentWindow || this._frame;
         this.apikey = opts.apikey || undefined;
         delete opts.apikey;
         this.opts = opts
     }
 
-    create_iframe(url, selector) {
-        let frame = window.document.createElement('iframe');
-        frame.id = "ps_"+randID();
+    init_iframe(url, selector) {
         if (selector !== undefined) {
-            frame.style['height'] = '40px';
-            frame.style['width'] = '40px';
-            frame.style['border'] = '0px';
-            frame.style['background-color'] = 'transparent';
-            const elem = window.document.body.querySelector(selector);
-            elem.appendChild(frame);
+            this.show_checkbox(selector)
         } else {
-            frame.style['display'] = 'none';
-            frame.style['position'] = 'absolute';
-            frame.style['top'] = '-999px';
-            frame.style['left'] = '-999px';
-            window.document.body.appendChild(frame);
+            this.hide_checkbox(undefined);
         }
-        const params = new URLSearchParams(this.opts).toString();
-        frame.src = `${url}?${params}`;
-        return frame;
+    }
+
+    detach_checkbox(selector) {
+        const sel = selector || this._selector;
+        if (sel) {
+            const elem = window.document.querySelector(sel);
+            if (elem) {
+                try {
+                    this._frame = elem.removeChild(this._frame);
+                } catch (err) {
+                    console.log(`Iframe not attached to: ${sel}`);
+                }
+            }
+        }
+    }
+
+    hide_checkbox(selector) {
+        this.detach_checkbox(selector);
+        this._frame.style['display'] = 'none';
+        this._frame.style['position'] = 'absolute';
+        this._frame.style['top'] = '-999px';
+        this._frame.style['left'] = '-999px';
+        window.document.body.appendChild(this._frame);
+    }
+
+    show_checkbox(selector) {
+      console.log(`trying to show in ${selector}`);
+        const elem = window.document.body.querySelector(selector);
+        if (elem !== null) {
+            this.detach_checkbox("body");
+            this._frame.style['height'] = '40px';
+            this._frame.style['width'] = '40px';
+            this._frame.style['border'] = '0px';
+            this._frame.style['background-color'] = 'transparent';
+            elem.appendChild(this._frame);
+        } else {
+            console.log(`Selector not found: ${selector}`);
+        }
     }
 
     /**
