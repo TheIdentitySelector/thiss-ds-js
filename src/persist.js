@@ -49,22 +49,22 @@ export class PersistenceService {
         this._frame = window.document.createElement('iframe');
         this._frame.id = "ps_"+randID();
         this._frame.src = url;
-        this.init_iframe(this._selector);
+        this._init_iframe(this._selector);
         this.dst = this._frame.contentWindow || this._frame;
         this.apikey = opts.apikey || undefined;
         delete opts.apikey;
         this.opts = opts
     }
 
-    init_iframe(url, selector) {
+    _init_iframe(selector) {
         if (selector !== undefined) {
             this.show_checkbox(selector)
         } else {
-            this.hide_checkbox(undefined);
+            this._hide_checkbox(undefined);
         }
     }
 
-    detach_checkbox(selector) {
+    _detach_checkbox(selector) {
         const sel = selector || this._selector;
         if (sel) {
             const elem = window.document.querySelector(sel);
@@ -78,27 +78,52 @@ export class PersistenceService {
         }
     }
 
-    hide_checkbox(selector) {
-        this.detach_checkbox(selector);
-        this._frame.style['display'] = 'none';
-        this._frame.style['position'] = 'absolute';
-        this._frame.style['top'] = '-999px';
-        this._frame.style['left'] = '-999px';
-        window.document.body.appendChild(this._frame);
+    _hide_checkbox(selector) {
+        try {
+            this._detach_checkbox(selector);
+            this._frame.style['display'] = 'none';
+            this._frame.style['position'] = 'absolute';
+            this._frame.style['top'] = '-999px';
+            this._frame.style['left'] = '-999px';
+            this._frame.style['height'] = '0px';
+            this._frame.style['width'] = '0px';
+            this._frame.style['border'] = '0px';
+            window.document.body.appendChild(this._frame);
+        } catch (err) {
+            console.log(`Problem attaching hidden checkbox: ${err}`);
+            return false;
+        }
     }
 
+    /**
+     * Attach and display Persistence Service checkbox to the element identified by the selector
+     *
+     *  @param {string} selector A selector identifying the element to which the checkbox will be appended
+     *  @returns {boolean} true on success.
+     */
     show_checkbox(selector) {
-      console.log(`trying to show in ${selector}`);
-        const elem = window.document.body.querySelector(selector);
-        if (elem !== null) {
-            this.detach_checkbox("body");
-            this._frame.style['height'] = '40px';
-            this._frame.style['width'] = '40px';
-            this._frame.style['border'] = '0px';
-            this._frame.style['background-color'] = 'transparent';
-            elem.appendChild(this._frame);
-        } else {
-            console.log(`Selector not found: ${selector}`);
+        try {
+            const elem = window.document.body.querySelector(selector);
+            if (elem !== null) {
+                this._detach_checkbox("body");
+                this._frame.style['display'] = 'inline-block';
+                this._frame.style['position'] = 'relative';
+                this._frame.style['top'] = '0px';
+                this._frame.style['left'] = '0px';
+                this._frame.style['height'] = '40px';
+                this._frame.style['width'] = '40px';
+                this._frame.style['border'] = '0px';
+                this._frame.style['background-color'] = 'transparent';
+                elem.appendChild(this._frame);
+                this.dst = this._frame.contentWindow || this._frame;
+                return true;
+            } else {
+                console.log(`Selector not found: ${selector}`);
+                return false;
+            }
+        } catch (err) {
+            console.log(`Problem attaching checkbox: ${err}`);
+            return false;
         }
     }
 
