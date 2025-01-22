@@ -71,3 +71,46 @@ Firt we would add some HTML element to hold te checkbox, and the provide the con
         }):
 
 And now we can do things with the `ds` object, see the DS API :ref:`api/discovery`
+
+Event signalling that the end user has granted storage access persmission
+=========================================================================
+
+When an advanced integration exposes the persistence service checkbox, and an end user clicks on it and grants storage access,
+the persistence service will emit a post-message event with id `storage-access-granted`, that the top level host site can listen to,
+for example to retrieve persisted entities, now that they can access them. For example:
+
+.. code-block:: js
+
+    postRobot.on('storage-access-granted', {window: ds.ps.dst}, function(event) {
+        ds.ps.entities(ds.context).then(function(result) {
+            if (result && result.data) {
+                // do something with the entities in result.data
+            }
+        });
+    });
+
+Exposing the checkbox after the persistence service is loaded
+=============================================================
+
+There may be cases where the advanced integrator may want to expose the persistence service checkbox in an element that is not visible on page load,
+for example in a modal that is opened in response to an end user interaction. In this case, we need to append the checkbox after the modal has loaded
+and is exposing the element to which the checkbox is to be attached. So we would first instantiate the persistence service without providing it with a locator:
+
+.. code-block:: js
+
+    import {PersistenceService} from "@theidentityselector/thiss-ds/src/persist.js";
+
+    const ps = PersistenceService('https://use.thiss.io/ps/');
+
+Then, at the time of displaying the element that will contain the checkbox, we need to call `PersistenceService.show_checkbox(selector: string)`.
+In this case, if we want to handle the `start` post-message event, we have to set the handler after calling `show_checkbox`:
+
+.. code-block:: js
+
+    someButton.addEventListener("click", (e) => {
+        // Display element with id "checkbox-sa-holder"
+        ds.ps.show_checkbox("#checkbox-sa-holder");
+        postRobot.on('start', {window: ds.ps.dst}, function(event) {
+            // Do something
+        });
+    });
