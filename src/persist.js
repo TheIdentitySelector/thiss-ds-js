@@ -81,6 +81,7 @@ export class PersistenceService {
     _hide_checkbox(selector) {
         try {
             this._detach_checkbox(selector);
+            this._frame.style['content-visibility'] = 'hidden';
             this._frame.style['display'] = 'none';
             this._frame.style['position'] = 'absolute';
             this._frame.style['top'] = '-999px';
@@ -106,6 +107,7 @@ export class PersistenceService {
             const elem = window.document.body.querySelector(selector);
             if (elem !== null) {
                 this._detach_checkbox("body");
+                this._frame.style['content-visibility'] = 'visible';
                 this._frame.style['display'] = 'inline-block';
                 this._frame.style['position'] = 'relative';
                 this._frame.style['top'] = '0px';
@@ -116,6 +118,7 @@ export class PersistenceService {
                 this._frame.style['background-color'] = 'transparent';
                 elem.appendChild(this._frame);
                 this.dst = this._frame.contentWindow || this._frame;
+                postRobot.send(this.dst, 'init-checkbox');
                 return true;
             } else {
                 console.log(`Selector not found: ${selector}`);
@@ -152,11 +155,11 @@ export class PersistenceService {
             .then(result => result)
             .catch(e => {
                 return new Promise((resolve, reject) => {
-                    const timeout = 10000;
+                    const timeout = 30000;
                     const timeoutID = window.setTimeout(() => {
                         reject(`Timeout ${timeout}`);
                     }, timeout);
-                    postRobot.on('init', {window: self.dst}, function(event) {
+                    postRobot.on('initialized', {window: self.dst}, function(event) {
                         window.clearTimeout(timeoutID);
                         resolve(
                             postRobot.send(self.dst, 'entities', {"context": context, "apikey": self.apikey})
