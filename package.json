@@ -23,7 +23,7 @@
   "author": "Leif Johansson <leifj@sunet.se>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "post-robot": "==8.0.32"
+    "post-robot": "==10.0.14"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",

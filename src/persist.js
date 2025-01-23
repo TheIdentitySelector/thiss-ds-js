@@ -157,7 +157,7 @@ export class PersistenceService {
                 return new Promise((resolve, reject) => {
                     const timeout = 30000;
                     const timeoutID = window.setTimeout(() => {
-                        reject(`Timeout ${timeout}`);
+                        reject(`Timeout waiting for initialized message: ${timeout}`);
                     }, timeout);
                     postRobot.on('initialized', {window: self.dst}, function(event) {
                         window.clearTimeout(timeoutID);
