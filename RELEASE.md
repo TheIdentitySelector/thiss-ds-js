@@ -11,3 +11,4 @@ How to do a release:
 - git tag, push, push tags
 - make release in github
 - npm publish
+- readthedocs

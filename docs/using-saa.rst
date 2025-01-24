@@ -103,14 +103,17 @@ and is exposing the element to which the checkbox is to be attached. So we would
     const ps = PersistenceService('https://use.thiss.io/ps/');
 
 Then, at the time of displaying the element that will contain the checkbox, we need to call `PersistenceService.show_checkbox(selector: string)`.
-In this case, if we want to handle the `start` post-message event, we have to set the handler after calling `show_checkbox`:
+In this case, if we want to handle the `storage-access-granted` post-message event, we have to set the handler after calling `show_checkbox`
+(since `show_checkbox` will change `ps.dst`):
 
 .. code-block:: js
 
     someButton.addEventListener("click", (e) => {
-        // Display element with id "checkbox-sa-holder"
+        // Code to display element with id "checkbox-sa-holder"
+        // ...
+        // Then attach checkbox to it:
         ds.ps.show_checkbox("#checkbox-sa-holder");
-        postRobot.on('start', {window: ds.ps.dst}, function(event) {
+        postRobot.on('storage-acccess-granted', {window: ds.ps.dst}, function(event) {
             // Do something
         });
     });
