@@ -52,3 +52,9 @@ Version 2.1.28
 
 * Documentation
 * Readthedocs configuration
+
+Version 2.1.29
+--------------
+
+* Backwards compatibility with ps 1.0.19
+* Allow loading checkbox later than page load
