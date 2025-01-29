@@ -118,7 +118,9 @@ export class PersistenceService {
                 this._frame.style['background-color'] = 'transparent';
                 elem.appendChild(this._frame);
                 this.dst = this._frame.contentWindow || this._frame;
-                postRobot.send(this.dst, 'init-checkbox');
+                postRobot.send(this.dst, 'init-checkbox')
+                      .then(event => {console.log(`Handled init-checkbox message from ${event.origin} ${event.source}`)})
+                      .catch(err => {console.log(`Handled init-checkbox message from ${event.origin}`)});
                 return true;
             } else {
                 console.log(`Selector not found: ${selector}`);
