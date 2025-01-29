@@ -59,7 +59,13 @@ Version 2.1.29
 * Backwards compatibility with ps 1.0.19
 * Allow loading checkbox later than page load
 
-Version 2.1.30
+version 2.1.30
 --------------
 
-* Fix documentation
+* fix documentation
+
+version 2.1.31
+--------------
+
+* handle init-checkbox message with no listener
+
