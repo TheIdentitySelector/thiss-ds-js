@@ -69,3 +69,7 @@ version 2.1.31
 
 * handle init-checkbox message with no listener
 
+version 2.1.32
+--------------
+
+* Bugfix
