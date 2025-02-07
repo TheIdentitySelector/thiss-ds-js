@@ -133,3 +133,13 @@ In this case, if we want to handle the `storage-access-granted` post-message eve
             // Do something
         });
     });
+
+Finally, if we need to hide the element that contains the checkbox (e.g., the checkbox is shown in a modal, and the end user closes the modal),
+we have to call `hide_checkbox` beforehand.
+
+.. code-block:: js
+
+    someButton.addEventListener("click", (e) => {
+        ds.ps.hide_checkbox("#checkbox-sa-holder");
+        // now we can remove the element holding the checkbox from the UI.
+    });
