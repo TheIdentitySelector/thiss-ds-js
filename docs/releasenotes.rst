@@ -78,3 +78,8 @@ version 2.1.35
 --------------
 
 * Cleanup
+
+version 2.1.36
+--------------
+
+* Fix problem with delayed display of the checkbox
