@@ -75,9 +75,9 @@ And now we can do things with the `ds` object, see the DS API :ref:`api/discover
 Event signalling that the end user has granted storage access persmission
 =========================================================================
 
-When an advanced integration exposes the persistence service checkbox, and an end user clicks on it and grants storage access,
-the persistence service will emit a post-message event with id `storage-access-granted`, that the top level host site can listen to,
-for example to retrieve persisted entities, now that they can access them. For example:
+When an advanced integration exposes the persistence service checkbox, and an end user clicks on it, is prompted for storage access permission,
+and grants it, the persistence service will emit a message event (managed with post-robot) with id `storage-access-granted`,
+that the top level host site can listen to, for example to retrieve persisted entities, now that they can access them. For example:
 
 .. code-block:: js
 
@@ -88,6 +88,22 @@ for example to retrieve persisted entities, now that they can access them. For e
             }
         });
     });
+
+Event signalling that the end user has clicked on the PS checkbox
+=================================================================
+
+Whenever the end user clicks on the PS checkbox, the PS will emit a message event that the top level site can subscribe to.
+This way, integrations can leverage the checkbox for their own purposes. This event will have (post-robot) id `sa-checkbox-clicked`
+and will include the subsequent state of the checkbox (checked/unchecked).
+For example:
+
+.. code-block:: js
+
+    postRobot.on('sa-checkbox-clicked', {window: ds.ps.dst}, function(event) {
+        const checked = event.data.checked;  // checked is a boolean
+        // do something
+    });
+
 
 Exposing the checkbox after the persistence service is loaded
 =============================================================
