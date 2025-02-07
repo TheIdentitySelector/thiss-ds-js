@@ -60,7 +60,7 @@ export class PersistenceService {
         if (selector !== undefined) {
             this.show_checkbox(selector)
         } else {
-            this._hide_checkbox(undefined);
+            this.hide_checkbox(undefined);
         }
     }
 
@@ -78,7 +78,13 @@ export class PersistenceService {
         }
     }
 
-    _hide_checkbox(selector) {
+    /**
+     * Hide Persistence Service checkbox that hasd been displayed under the provided selector
+     *
+     *  @param {string} selector A selector identifying the element to which the checkbox is currently appended
+     *  @returns {boolean} true on success.
+     */
+    hide_checkbox(selector) {
         try {
             this._detach_checkbox(selector);
             this._frame.style['content-visibility'] = 'hidden';
@@ -90,6 +96,8 @@ export class PersistenceService {
             this._frame.style['width'] = '0px';
             this._frame.style['border'] = '0px';
             window.document.body.appendChild(this._frame);
+            this.dst = this._frame.contentWindow || this._frame;
+            return true;
         } catch (err) {
             console.log(`Problem attaching hidden checkbox: ${err}`);
             return false;
