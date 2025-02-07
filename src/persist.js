@@ -120,7 +120,7 @@ export class PersistenceService {
                 this.dst = this._frame.contentWindow || this._frame;
                 postRobot.send(this.dst, 'init-checkbox')
                       .then(event => {console.log(`Handled init-checkbox message`)})
-                      .catch(err => {console.log(`Handled init-checkbox message`)});
+                      .catch(err => {console.log(`Error handling init-checkbox message: ${err}`)});
                 return true;
             } else {
                 console.log(`Selector not found: ${selector}`);
