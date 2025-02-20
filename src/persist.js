@@ -200,6 +200,22 @@ export class PersistenceService {
      *
      */
     entity(context, entity_id) {
-        return postRobot.send(this.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": this.apikey});
+        const self = this;
+        return postRobot.send(self.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": self.apikey})
+            .then(result => result)
+            .catch(e => {
+                return new Promise((resolve, reject) => {
+                    const timeout = 30000;
+                    const timeoutID = window.setTimeout(() => {
+                        reject(`Timeout waiting for initialized-entity message: ${timeout}`);
+                    }, timeout);
+                    postRobot.on('initialized-entity', {window: self.dst}, function(event) {
+                        window.clearTimeout(timeoutID);
+                        resolve(
+                            postRobot.send(self.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": self.apikey})
+                        );
+                    });
+                });
+            });
     }
 }
