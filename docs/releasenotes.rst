@@ -89,3 +89,8 @@ version 2.1.39
 
 * remove code for pinning entities
 * Update documentation
+
+version 2.1.40
+--------------
+
+* Update documentation
