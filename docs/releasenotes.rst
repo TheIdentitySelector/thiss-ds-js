@@ -83,3 +83,9 @@ version 2.1.36
 --------------
 
 * Fix problem with delayed display of the checkbox
+
+version 2.1.39
+--------------
+
+* remove code for pinning entities
+* Update documentation
