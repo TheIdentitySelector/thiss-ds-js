@@ -99,3 +99,8 @@ version 2.1.47
 --------------
 
 * Prepare for users using / as return URL
+
+version 2.1.48
+--------------
+
+* Allow undefined params in ds_response_url
