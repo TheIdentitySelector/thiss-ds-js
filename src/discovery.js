@@ -158,9 +158,16 @@ export function ds_response_url(entity, params) {
      * Since this is controlled by the caller, We must ensure that it is
      * correct and sanitize it. Ideally, we should compare it against the
      * Location attribute of the known <DiscoveryResponse> elements.
+    * edited to add: this is done at thiss-jssrc/ds/index.js l377
+    * for advanced integrations, we have no guarantee that their entity data
+    * contains DiscoveryResponse information - it's not part of discojson.
      *
      * If the `return` query-param is not a valid URL we throw an error.
      */
+    if (!params || !params.return) {
+        // this is so that the demo works - it seems harmless
+        params = {...params, 'return': '/'};
+    }
     let response = params.return;
     if (response === "/") {
         response = window.location.origin
