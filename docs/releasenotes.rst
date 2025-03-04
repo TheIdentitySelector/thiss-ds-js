@@ -94,3 +94,8 @@ version 2.1.40
 --------------
 
 * Update documentation
+
+version 2.1.47
+--------------
+
+* Prepare for users using / as return URL
