@@ -162,6 +162,11 @@ export function ds_response_url(entity, params) {
      * If the `return` query-param is not a valid URL we throw an error.
      */
     let response = params.return;
+    if (response === "/") {
+        response = window.location.origin
+                    ? window.location.origin + '/'
+                    : window.location.protocol + '//' + window.location.host + '/';
+    }
     if (response === undefined || (!response.startsWith('http://') && !response.startsWith('https://'))) {
         throw new Error(`Invalid return query param: ${response}`)
     }
