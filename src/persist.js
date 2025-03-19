@@ -202,4 +202,15 @@ export class PersistenceService {
     entity(context, entity_id) {
         return postRobot.send(this.dst, 'entity', {"context": context, "entity_id": entity_id, "apikey": this.apikey});
     }
+
+    /**
+     * Check whether the persistence service has storage access permission
+     *
+     *  @param {string} context The context to write to
+     *  @returns {boolean} A promise that resolves to a boolean
+     *
+     */
+    has_storage_access(context) {
+        return postRobot.send(this.dst, 'has_storage_access', {"context": context, "apikey": this.apikey});
+    }
 }
