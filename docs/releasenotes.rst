@@ -104,3 +104,8 @@ version 2.1.48
 --------------
 
 * Allow undefined params in ds_response_url
+
+version 2.1.52
+--------------
+
+* Add has_storage_access funtion to advanced ps API
