@@ -192,6 +192,17 @@ export class PersistenceService {
     }
 
     /**
+     * Remove all entities from the context.
+     *
+     *  @param {string} context The context to write to
+     *  @returns {Promise} A Promise that resolves to nothing on success.
+     *
+     */
+    clear(context) {
+        return postRobot.send(this.dst, 'clear', {"context": context, "apikey": this.apikey});
+    }
+
+    /**
      * Fetch an entity from the context.
      *
      *  @param {string} context The context to write to
