@@ -28,3 +28,5 @@ CDN (thanks to `unpkg.com <https://unpkg.com>`_)
 
   <script src="//unpkg.com/browse/@theidentityselector/thiss-ds" />
 
+
+NOTE: Pulling from unpkg does not work for version 2.1.52 as it depends on an outdated version of post-robot.

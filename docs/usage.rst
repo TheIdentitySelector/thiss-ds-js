@@ -4,7 +4,7 @@ Using thiss-ds
 Overview
 --------
 
-There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersistenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage (or cookies when local storage is not available). The namespace is called the "context" below (more about how contexts work later).
+There are two main APIs - a highlevel DiscoveryService API (which in hindsight really should have been called a discovery client API but ...) and a lowlevel PersistenceService. The job of the PersistenceService is to keep track of previous IdP choices. The data is stored in namespace browser local storage. The namespace is called the "context" below (more about how contexts work later).
 
 The DiscoveryService class is essentially a reference to an instance of the PersistenceService and a metadata query service (MDQ for short) which relies on fetch to retrieve JSON-objects that represent known identity providers. This class also contains some utility methods providing a way to implement SAML Identity Provider Discovery v1.0.
 
