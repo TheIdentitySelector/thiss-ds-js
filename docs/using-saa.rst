@@ -3,22 +3,22 @@ Leveraging the Storage Access API
 
 The persistence service (PS) needs to access first party, non-partitioned storage to be able to remember chosen IdPs across different SPs.
 Recent developments in browser technology, designed to protect end user's privacy,
-mean that to do so, the PS will have to make use of the Storage Access API.
+mean that to do so, the PS will have to make use of the Storage Access API (SAA), which provides access to non-partitioned storage
+from a 3rd party context.
 
-The Storage Acces API allows javascript code in a third party context (e.g. in an iframe, as is the case for the PS)
-to prompt the end user for permission to access first party storage. This API can only be used from code in the third party context,
-and can only be called in reaction to an end user interaction with some UI element in the third party context.
-In addition, to be able to use the API, the user must have previously visited the third party origin in a first party context.
+As mentioned in :ref:`the introduction <saa-intro-label>` and in :ref:`using thiss-ds.js<saa-usage-label>`,
+for users of chrome and chromium based browsers that have enabled a privacy setting (at this point -July 2025- still to be specified),
+using the SAA requires some special setup.
+So this section is for integrators that want to provide global persistence for such users.
 
-Note that at this point, to test the Storage Access API in chrome and chromium derivatives, the end user has to enable the flag
-"third party cookie phaseout". To do this, enter `chrome://flags` in the address bar, and then look for "third party cookie phaseout",
-enable it, and restart the browser.
+For these users, the SAA can only be called in reaction to an end user interaction with some UI element in the third party context.
+In addition, to be able to use the API, the user must have previously (less than 30 days earlier) visited the third party origin in a first party context.
 
-Previously, the PS ran in an iframe that was fully invisible, with no elemets exposed in the UI.
-This is no longer possible, if we want to leverage the Storage Access API; the PS will need to expose some element in the UI.
-For the moment, this element is a checkbox. The integrator using the PS client in their code will need to decide where to expose it.
+By default, the PS runs in an iframe that is fully hidden, with no elements exposed in the UI.
+If we want to provide global persistence for these users, the PS will need to expose some element in the UI.
+For the moment, this element is a checkbox. The integrators using the PS client in their code will need to decide where to expose it.
 So the call to the constructor for the client for the PS can take a new parameter, a DOM locator, pointing to some element
-in the UI to which the checkbox will be appended.
+in the UI to which the checkbox will be attached.
 
 The behaviour of the checkbox only affects the way user choices are persisted.
 
@@ -58,7 +58,7 @@ Then we call the constructor:
 Now we can do things with the `ps` object, see the PS API :ref:`api/persist`
 
 The changes to code using the :class:`DiscoveryService` class are similar, since it includes a :class:`PersistenceService` property.
-Firt we would add some HTML element to hold te checkbox, and the provide the constructor with a selector for the element:
+First we would add some HTML element to hold te checkbox, and the provide the constructor with a selector for the element:
 
 .. code-block:: js
 

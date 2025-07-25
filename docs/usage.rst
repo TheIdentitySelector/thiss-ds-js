@@ -30,7 +30,13 @@ Create an instance of the DiscoveryService object thus (where `my_context` is a 
           entityID: "https://sp-publishing-trust-profile.net/shibboleth"
         }):
 
-The options `selector`, `trustProfile`, and `entityID` are optional. The `selector` option is used to provide an anchor in the UI to which the service can attach a checkbox that will allow it to prompt the user for permission to access global persistence. The `trustProfile`, and `entityID` are used to indicate a trust profile (which the MDQ must know about) that will limit the IdPs returned by the MDQ to some subset of all the IdPs known to it. There are different criteria that trust profiles can use to limit the IdPs served, such as by registration authority, or metadata source.
+The options `selector`, `trustProfile`, and `entityID` are optional.
+
+.. _saa-usage-label:
+
+The `selector` option is used to provide an anchor in the top level UI to which the service can attach a checkbox that will allow it to prompt the user for permission to access global persistence. As noted in the introduction, this will only affect users of chrome and chromium-based browsers that have enabled the privacy flag; this will presumably be a very small subset of users, so if the checkbox does not easily fit with the UX of the top level site, you can consider omitting it.
+
+The `trustProfile`, and `entityID` are used to indicate a trust profile (which the MDQ must know about) that will limit the IdPs returned by the MDQ to some subset of all the IdPs known to it. There are different criteria that trust profiles can use to limit the IdPs served, such as by registration authority, or metadata source.
 
 Calling the metadata lookup service with the entityID of an IdP returns a Promise that resolves (if the lookup was successful) to a JSON object (or undefined) that represents the IdP. The "schema" of the JSON is based in large parts on the classical discojson format and is explained below.
 
@@ -86,8 +92,12 @@ The following fields are currently used:
 
   {
     "entity_icon": "a data: URI for direct inclusion in html",
-    "descr": "a short description suitable for display inline",
+    "entity_icon_url": "a URI for reference inclusion in html",
     "title": "the name of the identity provider - primary display for users",
+    "title_langs": "translations of the title",
+    "descr": "a short description suitable for display inline",
+    "descr_langs": "translations of the description",
+    "md_sources": "metadata sources in which the entity was present",
     "name_tag": "an upper-case SLUG - typically based on the non-TLD/ccTLD part of the domain",
     "type": "idp or sp",
     "auth": "saml|opendic|other",
