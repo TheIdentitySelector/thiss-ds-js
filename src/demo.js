@@ -1,10 +1,12 @@
 import {DiscoveryService} from "./discovery"
+import {EntityReader} from "./md_extractor";
 
 function entity_to_dl(entity,dl) {
    let doc = window.document;
    Array.from(dl.children).forEach(c => o.removeChild(c));
-   Object.getOwnPropertyNames(entity).forEach(k => {
-      let v = entity[k];
+   const reader = new EntityReader(entity);
+   ['type', 'title', 'title_langs', 'descr', 'descr_langs', 'entity_icon', 'entity_icon_url'].forEach(k => {
+      let v = reader.getAttribute(k);
       let dt = doc.createElement("dt");
       dt.textContent = k;
       dl.appendChild(dt);
@@ -13,14 +15,10 @@ function entity_to_dl(entity,dl) {
          let img = doc.createElement("img")
          img.setAttribute("src", v);
          dd.appendChild(img);
-      } else if (typeof v === 'object') {
-         let inner = doc.createElement("dl");
-         entity_to_dl(v, inner);
-         dd.appendChild(inner);
       } else {
-         dd.textContent = v;
+         dd.textContent = JSON.stringify(v);
       }
-         dl.appendChild(dd);
+      dl.appendChild(dd);
    })
     
 }
