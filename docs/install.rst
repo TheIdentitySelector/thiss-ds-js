@@ -1,21 +1,6 @@
 Installing thiss-ds-js
 ======================
 
-Different versions of the server API require different versions of the client library,
-so care must be taken when choosing the version of the of the client library.
-
-Version 1 of the API
---------------------
-
-Version 1 of the API is served from https://service.seamlessaccess.org/ (or https://use.thiss.io/).
-The client library fore this API version is 2.1.52.
-
-Version 2 of the API
---------------------
-
-Version 1 of the API is served from https://service.seamlessaccess.org/v2/ (or https://use.thiss.io/v2/).
-The client library fore this API version is X.X.X.
-
 Install
 =======
 

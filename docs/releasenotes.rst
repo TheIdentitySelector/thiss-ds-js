@@ -115,3 +115,8 @@ version 2.1.53
 
 * Add clear method to discovery service API
 * Update docs
+
+version 2.1.54
+--------------
+
+* upgrade post-robot
