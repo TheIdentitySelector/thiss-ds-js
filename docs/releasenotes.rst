@@ -110,13 +110,8 @@ version 2.1.52
 
 * Add has_storage_access funtion to advanced ps API
 
-version 2.1.53
+version 2.1.55
 --------------
 
 * Add clear method to discovery service API
 * Update docs
-
-version 2.1.54
---------------
-
-* upgrade post-robot
