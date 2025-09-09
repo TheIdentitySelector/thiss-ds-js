@@ -115,3 +115,8 @@ version 2.1.55
 
 * Add clear method to discovery service API
 * Update docs
+
+version 3.0.0
+-------------
+
+* Integrate openid federations
