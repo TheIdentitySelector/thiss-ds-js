@@ -41,11 +41,16 @@ export class EntityReader {
                     title: (entity) => entity.ui_infos[this.openidType].display_name,
                     title_langs: (entity) => {return {en: entity.ui_infos[this.openidType].display_name}},
                     entity_icon: (entity) => null,
-                    entity_icon_url: (entity) => {return {url: entity.ui_infos[this.openidType].logo_uri, width: 100, height: 100}},
+                    entity_icon_url: (entity) => {
+                        if (entity.ui_infos[this.openidType].logo_uri) {
+                            return {url: entity.ui_infos[this.openidType].logo_uri, width: 100, height: 100}
+                        } else return null
+                    },
                     domain: (entity) => null,
                     name_tag: (entity) => null,
                     hidden: (entity) => false,
                     hint: (entity) => false,
+                    discovery_responses: (entity) => null,
                 };
             } else if (this.detectedStandard === 'SAML') {
                 this.schemaConfigs.SAML.extractors = {
@@ -58,6 +63,7 @@ export class EntityReader {
                     name_tag: (entity) => entity.name_tag || null,
                     hidden: (entity) => { return entity.hidden === 'true' ? true : false },
                     hint: (entity) => { return entity.hint === 'true' ? true : false },
+                    discovery_responses: (entity) => entity.discovery_responses || null,
                 };
             }
             this.extractedAttributes = this.extractAttributes();
