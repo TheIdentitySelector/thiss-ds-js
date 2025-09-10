@@ -83,6 +83,25 @@ Finally the remove method removes the chose entity_id from the persistence-servi
 
   ds.remove(entity_id)
 
+Versions
+--------
+
+The version of the thiss-ds package will depend on the version of the persistence service that is going to be used.
+The version of the persistence service can be found in `/manifest.json`. For example, if the persistence service is at
+`https://use.thiss.io/ps/`, its version can be found at `https://use.thiss.io/manifest.json`. Also if post-robot is used
+to directly communicate with the persistence service its version will depend on the persistence service version.
+
+This is a table of compatible versions:
+
+.. csv-table:: Compatible versionss
+   :header: "Persistence Service", "thiss-ds", "post-robot"
+   :widths: 150, 150, 150
+   :align: center
+
+    "2.1.98", "2.1.52", "10.0.14"
+    "2.1.141", "2.1.52", "10.0.14"
+    "3.0.0", "3.0.0", "10.0.14"
+
 Metadata JSON schema
 --------------------
 

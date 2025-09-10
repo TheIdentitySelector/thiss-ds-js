@@ -10,6 +10,9 @@ Install via npm is straight-forward:
 
   # npm install [--save] @theidentityselector/thiss-ds@<version>
 
+The thiss-ds version to use will depend on the version of the persistence service that will be used.
+See the section on versions under the title "Using thiss-ds".
+
 The thiss-ds package supports both CommonJS-style and ES6 import aswell as old-school CDN delivery:
 
 CommonJS:
