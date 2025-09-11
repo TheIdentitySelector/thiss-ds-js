@@ -39,7 +39,27 @@ export class EntityReader {
                 this.schemaConfigs.Openid.extractors = {
                     entityID: (entity) => entity.entity_id,
                     title: (entity) => entity.ui_infos[this.openidType].display_name,
-                    title_langs: (entity) => {return {en: entity.ui_infos[this.openidType].display_name}},
+                    title_langs: (entity) => {
+                        const title_langs = {};
+                        for (const property in entity.ui_infos[this.openidType]) {
+                            if (property.startsWith('display_name') && '#' in property) {
+                                const lang = property.split('#')[1];
+                                title_langs[lang] = entity.ui_infos[this.openidType][property];
+                            }
+                        }
+                        return title_langs;
+                    },
+                    descr: (entity) => entity.ui_infos[this.openidType].description || null,
+                    descr_langs: (entity) => {
+                        const descr_langs = {};
+                        for (const property in entity.ui_infos[this.openidType]) {
+                            if (property.startsWith('description') && '#' in property) {
+                                const lang = property.split('#')[1];
+                                descr_langs[lang] = entity.ui_infos[this.openidType][property];
+                            }
+                        }
+                        return descr_langs;
+                    },
                     entity_icon: (entity) => null,
                     entity_icon_url: (entity) => {
                         if (entity.ui_infos[this.openidType].logo_uri) {
@@ -56,7 +76,9 @@ export class EntityReader {
                 this.schemaConfigs.SAML.extractors = {
                     entityID: (entity) => entity.entityID,
                     title: (entity) => entity.title,
-                    title_langs: (entity) => entity.title_langs || null,
+                    title_langs: (entity) => entity.title_langs || {},
+                    descr: (entity) => entity.descr || null,
+                    descr_langs: (entity) => entity.descr_langs || {},
                     entity_icon: (entity) => entity.entity_icon || null,
                     entity_icon_url: (entity) => entity.entity_icon_url || null,
                     domain: (entity) => entity.domain || null,
@@ -118,5 +140,9 @@ export class EntityReader {
     hasAttribute(name) {
         return this.extractedAttributes.hasOwnProperty(name) && 
                this.extractedAttributes[name] !== null;
+    }
+
+    getDiscoJSON() {
+        return this.extractedAttributes;
     }
 }
