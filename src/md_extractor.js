@@ -42,7 +42,7 @@ export class EntityReader {
                     title_langs: (entity) => {
                         const title_langs = {};
                         for (const property in entity.ui_infos[this.openidType]) {
-                            if (property.startsWith('display_name') && '#' in property) {
+                            if (property.startsWith('display_name') && property.includes('#')) {
                                 const lang = property.split('#')[1];
                                 title_langs[lang] = entity.ui_infos[this.openidType][property];
                             }
@@ -53,7 +53,7 @@ export class EntityReader {
                     descr_langs: (entity) => {
                         const descr_langs = {};
                         for (const property in entity.ui_infos[this.openidType]) {
-                            if (property.startsWith('description') && '#' in property) {
+                            if (property.startsWith('description') && property.includes('#')) {
                                 const lang = property.split('#')[1];
                                 descr_langs[lang] = entity.ui_infos[this.openidType][property];
                             }
