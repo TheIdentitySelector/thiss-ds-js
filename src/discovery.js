@@ -139,6 +139,24 @@ export function parse_qs(paramsArray) {
     return params;
 }
 
+function changeTargetToOpenid(url) {
+  try {
+    const urlObj = new URL(url);
+    
+    if (urlObj.searchParams.has('target')) {
+      const targetValue = urlObj.searchParams.get('target');
+      
+      urlObj.searchParams.delete('target');
+      urlObj.searchParams.set('target_link_uri', targetValue);
+    }
+    
+    return urlObj.toString();
+  } catch (error) {
+    console.error('Invalid URL:', error);
+    return url;
+  }
+}
+
 /**
  * Create a SAML discovery service protocol response URL from the entity_id property of the
  * entity object and the return and returnIDParam (if present) of the params object.
@@ -189,6 +207,7 @@ export function ds_response_url(entity, params) {
             returnIDParam = "entityID";
         } else if (reader.detectedStandard === 'Openid') {
             returnIDParam = "iss";
+            response = changeTargetToOpenid(response);
         }
     }
 
