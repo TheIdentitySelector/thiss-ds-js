@@ -1,5 +1,5 @@
 import {PersistenceService} from "./persist.js";
-import {EntityReader} from "@theidentityselector/thiss-ds/src/md_extractor.js";
+import {EntityReader} from "./md_extractor.js";
 import hex_sha1 from './sha1.js';
 const cache_time = 60 * 10 * 1000; // 10 minutes
 
