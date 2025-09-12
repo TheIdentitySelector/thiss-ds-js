@@ -1,4 +1,5 @@
 import {PersistenceService} from "./persist.js";
+import {EntityReader} from "@theidentityselector/thiss-ds/src/md_extractor.js";
 import hex_sha1 from './sha1.js';
 const cache_time = 60 * 10 * 1000; // 10 minutes
 
@@ -158,7 +159,7 @@ export function ds_response_url(entity, params) {
      * Since this is controlled by the caller, We must ensure that it is
      * correct and sanitize it. Ideally, we should compare it against the
      * Location attribute of the known <DiscoveryResponse> elements.
-    * edited to add: this is done at thiss-jssrc/ds/index.js l377
+    * edited to add: this is done at thiss-js/src/ds/index.js l377
     * for advanced integrations, we have no guarantee that their entity data
     * contains DiscoveryResponse information - it's not part of discojson.
      *
@@ -181,9 +182,14 @@ export function ds_response_url(entity, params) {
     let qs = response.indexOf('?') === -1 ? '?' : '&';
     let returnIDParam = params.returnIDParam;
 
-    let entity_id = entity.entity_id;
+    const reader = new EntityReader(entity, 'idp');
+    const entity_id = reader.getAttribute('entityID');
     if (!returnIDParam) {
-        returnIDParam = "entityID";
+        if (reader.detectedStandard === 'SAML') {
+            returnIDParam = "entityID";
+        } else if (reader.detectedStandard === 'Openid') {
+            returnIDParam = "iss";
+        }
     }
 
     if (entity_id) {
