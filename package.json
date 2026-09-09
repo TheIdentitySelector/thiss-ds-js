@@ -16,14 +16,15 @@
     "lint": "node_modules/.bin/goodparts src",
     "cover": "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.prod.js && ./scripts/check-wire-key.sh",
     "snyk-protect": "snyk protect",
+    "postinstall": "./scripts/pin-post-robot-key.sh",
     "prepare": "npm run snyk-protect"
   },
   "author": "Leif Johansson <leifj@sunet.se>",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "post-robot": "==10.0.14"
+    "post-robot": "npm:@krakenjs/post-robot@11.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.8",
