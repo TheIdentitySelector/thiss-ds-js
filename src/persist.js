@@ -153,8 +153,9 @@ export class PersistenceService {
 
     /**
      * Returns 0-3 of the most recently used entities as a list of item Objects. Be sure to
-     * examine the last_time property to make sure the provided entities are "recent" enough
-     * to be used.
+     * examine the last_use property to make sure the provided entities are "recent" enough
+     * to be used. Keep in mind that last_use living on the item wrapper, not inside entity,
+     * so item.last_use, not item.entity.last_use
      *
      *  @param {string} context The context to write to
      *  @returns {Promise} A Promise that resolves to a list of items on success.
