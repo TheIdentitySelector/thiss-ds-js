@@ -116,7 +116,7 @@ version 2.1.56
 * Add clear method to discovery service API
 * Update docs
 
-version 4.0.0
+version 4.0.1
 -------------
 
 * Upgrade some dependencies
