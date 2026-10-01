@@ -11,7 +11,7 @@ Start by creating an empty directory on a webserver and create in it an index.ht
   <!DOCTYPE html>
   <html>
   <head>
-    <script src="//unpkg.com/@theidentityselector/thiss-ds@<version>"></script>
+    <script src="https://unpkg.com/@theidentityselector/thiss-ds@4.0.1/dist/thiss-ds.js"></script>
     <script src="demo.js"></script>
     <title>Tiny Discovery Service</title>
   </head>
@@ -29,7 +29,8 @@ Start by creating an empty directory on a webserver and create in it an index.ht
 ..
 
 The only thing that goes on here is a couple of fields for letting the js code interact with the user. The real meat
-goes on in demo.js which we'll create next. Note that we load the thiss-js package from the unpkg CDN first.
+goes on in demo.js which we'll create next. Note that we load the thiss-ds package from the unpkg CDN first, pinned to
+an exact version (see Installing thiss-ds-js for which versions to use).
 
 Now in demo.js (in the same directory) put this:
 

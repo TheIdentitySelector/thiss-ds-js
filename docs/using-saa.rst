@@ -78,9 +78,12 @@ Event signalling that the end user has clicked on the PS checkbox
 Whenever the end user clicks on the PS checkbox, the PS will emit a message event that the top level site can subscribe to.
 This way, integrations can leverage the checkbox for their own purposes. This event will have (post-robot) id `sa-checkbox-clicked`
 and will include the subsequent state of the checkbox (checked/unchecked).
-For example:
+Subscribe with the post-robot bundled with thiss-ds (`thiss.postRobot` when loaded from the CDN). A separately installed
+post-robot speaks a different wire dialect and never receives the event. For example:
 
 .. code-block:: js
+
+    import {postRobot} from "@theidentityselector/thiss-ds";
 
     postRobot.on('sa-checkbox-clicked', {window: ds.ps.dst}, function(event) {
         const checked = event.data.checked;  // checked is a boolean
@@ -97,9 +100,9 @@ and is exposing the element to which the checkbox is to be attached. So we would
 
 .. code-block:: js
 
-    import {PersistenceService} from "@theidentityselector/thiss-ds/src/persist.js";
+    import {PersistenceService, postRobot} from "@theidentityselector/thiss-ds";
 
-    const ps = PersistenceService('https://use.thiss.io/ps/');
+    const ps = new PersistenceService('https://use.thiss.io/ps/');
 
 Then, at the time of displaying the element that will contain the checkbox, we need to call `PersistenceService.show_checkbox(selector: string)`.
 In this case, if we want to handle the `sa-checkbox-clicked` post-message event, we have to set the handler after calling `show_checkbox`

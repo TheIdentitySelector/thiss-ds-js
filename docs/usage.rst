@@ -86,21 +86,22 @@ Finally the remove method removes the chose entity_id from the persistence-servi
 Versions
 --------
 
-The version of the thiss-ds package will depend on the version of the persistence service that is going to be used.
-The version of the persistence service can be found in `/manifest.json`. For example, if the persistence service is at
-`https://use.thiss.io/ps/`, its version can be found at `https://use.thiss.io/manifest.json`. Also if post-robot is used
-to directly communicate with the persistence service its version will depend on the persistence service version.
+thiss-ds talks to the persistence service with post-robot. Two post-robot builds can only exchange messages when they
+speak the same wire dialect. Every deployed persistence service (thiss-js 2.1.x and 4.0.x) speaks the post-robot 10.0.14
+dialect. Since thiss-ds 4.0.1 the bundled post-robot is pinned to that dialect at install time, whatever library version
+is packaged. So thiss-ds 4.0.1 and later works with every persistence service, and the post-robot version in
+`package.json` is no longer the compatibility indicator.
 
-This is a table of compatible versions:
+Three published versions do not work and must not be used: 4.0.0 (it sends a different envelope and fails against every
+service), and the unpkg builds of 1.0.14 and 2.1.54 (published with a different post-robot than they declare). Pin the
+exact version so a later publish cannot change the dialect under you.
 
-.. csv-table:: Compatible versionss
-   :header: "Persistence Service", "thiss-ds", "post-robot"
-   :widths: 150, 150, 150
-   :align: center
+The version of a persistence service can be found in `/manifest.json`. For example, if the persistence service is at
+`https://use.thiss.io/ps/`, its version can be found at `https://use.thiss.io/manifest.json`.
 
-    "2.1.98", "2.1.52", "10.0.14"
-    "2.1.141", "2.1.52", "10.0.14"
-    "3.0.0", "3.0.0", "10.0.14"
+If your integration uses post-robot directly, for example to receive the `sa-checkbox-clicked` event, it must use the
+post-robot bundled with thiss-ds. A separately installed post-robot speaks a different dialect, and its messages are
+silently dropped. See the section on the Storage Access API.
 
 Metadata JSON schema
 --------------------

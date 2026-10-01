@@ -12,7 +12,7 @@ This package (thiss-ds-js) contains the parts needed to write a client that talk
 Architecture
 ------------
 
-The Identity Selector Software (thiss.io) is a set of front-channel (aka browser-based) cross-domain APIs using post-message (built using the `post-robot <https://github.com/krakenjs/post-robot>`_ package):
+The Identity Selector Software (thiss.io) is a set of front-channel (aka browser-based) cross-domain APIs using post-message (built using the `post-robot <https://github.com/krakenjs/post-robot>`_ package). post-robot only connects two sides that speak the same wire dialect; this library pins its bundled post-robot to the dialect the deployed services speak, so client and server stay compatible across library upgrades (see Versions under Using thiss-ds):
 
 * A persistence API that allows store & retrieval of information about the last N (3) identity providers used to authenticate a user. Unlike simlilar project (eg google account chooser) the information stored does not include any PII (eg email-addresses) but only identifies the identity provider used in a way consistent with the authentication protocol used.
 * A discovery API that implements `SAML identity provider discovery <http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-idp-discovery.pdf>`_ layered on top of the persistence API

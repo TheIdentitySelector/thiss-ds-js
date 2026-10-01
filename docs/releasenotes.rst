@@ -116,7 +116,18 @@ version 2.1.56
 * Add clear method to discovery service API
 * Update docs
 
+version 4.0.0
+-------------
+
+* Do not use. The post-robot dependency moved to `@krakenjs/post-robot` 11, whose wire format differs from the
+  10.0.14 dialect every deployed persistence service speaks, so this build cannot talk to any service.
+
 version 4.0.1
 -------------
 
-* Upgrade some dependencies
+* post-robot is `@krakenjs/post-robot` 11, with the wire protocol pinned to the 10.0.14 dialect at install time
+  (`scripts/pin-post-robot-key.sh`): the envelope key and the one-message-per-envelope format. Works with every
+  deployed persistence service, old and new.
+* The build fails if `dist/thiss-ds.js` speaks any other dialect (`scripts/check-wire-key.sh`).
+* Upgrade development dependencies.
+* Fix the `entities()` docstring: the timestamp property is `last_use`, on the item wrapper, not inside `entity`.
