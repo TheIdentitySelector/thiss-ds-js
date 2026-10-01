@@ -31,7 +31,7 @@ CDN (thanks to `unpkg.com <https://unpkg.com>`_), pinned to an exact version:
 
 .. code-block:: html
 
-  <script src="https://unpkg.com/@theidentityselector/thiss-ds@4.0.1/dist/thiss-ds.js"></script>
+  <script src="https://unpkg.com/@theidentityselector/thiss-ds@4.0.2/dist/thiss-ds.js"></script>
 
 NOTE: three published versions must not be used, from npm or unpkg: 4.0.0, and the unpkg builds of 1.0.14 and 2.1.54.
 They speak a different post-robot wire dialect than the persistence services and fail silently.

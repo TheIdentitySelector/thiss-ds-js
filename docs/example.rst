@@ -11,7 +11,7 @@ Start by creating an empty directory on a webserver and create in it an index.ht
   <!DOCTYPE html>
   <html>
   <head>
-    <script src="https://unpkg.com/@theidentityselector/thiss-ds@4.0.1/dist/thiss-ds.js"></script>
+    <script src="https://unpkg.com/@theidentityselector/thiss-ds@4.0.2/dist/thiss-ds.js"></script>
     <script src="demo.js"></script>
     <title>Tiny Discovery Service</title>
   </head>

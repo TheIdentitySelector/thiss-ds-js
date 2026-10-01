@@ -131,3 +131,10 @@ version 4.0.1
 * The build fails if `dist/thiss-ds.js` speaks any other dialect (`scripts/check-wire-key.sh`).
 * Upgrade development dependencies.
 * Fix the `entities()` docstring: the timestamp property is `last_use`, on the item wrapper, not inside `entity`.
+
+version 4.0.2
+-------------
+
+* Export the bundled post-robot instance (`postRobot`), for integrations that subscribe to persistence service events
+  such as `sa-checkbox-clicked`.
+* Documentation: pinned unpkg URL, versions to use and to avoid, release notes for 4.0.0 and 4.0.1.
